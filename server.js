@@ -12,7 +12,6 @@ if (fs.existsSync(envPath)) {
 }
 
 const handler = require('./api/roadmap');
-const HTML = path.join(__dirname, 'ai-builder-dashboard.html');
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
@@ -40,9 +39,17 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (url.pathname === '/' || url.pathname === '/ai-builder-dashboard.html') {
+  // Serve HTML files from the project root
+  let filePath;
+  if (url.pathname === '/') {
+    filePath = path.join(__dirname, 'ai-builder-dashboard.html');
+  } else if (url.pathname.endsWith('.html')) {
+    filePath = path.join(__dirname, path.basename(url.pathname));
+  }
+
+  if (filePath && fs.existsSync(filePath)) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    fs.createReadStream(HTML).pipe(res);
+    fs.createReadStream(filePath).pipe(res);
     return;
   }
 

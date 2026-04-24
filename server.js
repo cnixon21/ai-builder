@@ -1,0 +1,54 @@
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+// Load .env.local
+const envPath = path.join(__dirname, '.env.local');
+if (fs.existsSync(envPath)) {
+  fs.readFileSync(envPath, 'utf8').split('\n').forEach(line => {
+    const [k, ...v] = line.split('=');
+    if (k && v.length) process.env[k.trim()] = v.join('=').trim();
+  });
+}
+
+const handler = require('./api/roadmap');
+const HTML = path.join(__dirname, 'ai-builder-dashboard.html');
+
+const server = http.createServer((req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+
+  if (url.pathname === '/api/roadmap') {
+    let body = '';
+    req.on('data', chunk => (body += chunk));
+    req.on('end', () => {
+      if (body) {
+        try { req.body = JSON.parse(body); } catch { req.body = {}; }
+      } else {
+        req.body = {};
+      }
+      res.json = (data) => {
+        res.writeHead(res.statusCode || 200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(data));
+      };
+      res.status = (code) => { res.statusCode = code; return res; };
+      handler(req, res).catch(err => {
+        console.error(err);
+        res.writeHead(500);
+        res.end(JSON.stringify({ error: err.message }));
+      });
+    });
+    return;
+  }
+
+  if (url.pathname === '/' || url.pathname === '/ai-builder-dashboard.html') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    fs.createReadStream(HTML).pipe(res);
+    return;
+  }
+
+  res.writeHead(404);
+  res.end('Not found');
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log(`Running at http://localhost:${PORT}`));

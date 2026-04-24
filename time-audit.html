@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Audit — Casey Nixon</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2535;
+    --border: #2a3347;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --accent: #4f8ef7;
+    --accent2: #7c66db;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Inter', 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Header */
+  .header { border-bottom: 1px solid var(--border); padding-bottom: 32px; margin-bottom: 40px; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .header-name { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-meta { text-align: right; }
+  .header-date { font-size: 13px; color: var(--muted); }
+  .header-goal { margin-top: 16px; background: var(--bg3); border: 1px solid var(--accent); border-radius: 8px; padding: 12px 18px; display: inline-block; }
+  .header-goal .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 600; }
+  .header-goal .value { font-size: 15px; font-weight: 600; margin-top: 2px; }
+
+  /* Section */
+  .section { margin-bottom: 48px; }
+  .section-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-title .num { font-size: 12px; color: var(--muted); font-weight: 500; background: var(--bg3); padding: 2px 8px; border-radius: 10px; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* Card */
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 600; margin-bottom: 14px; }
+
+  /* Bar row */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { width: 130px; font-size: 13px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-label-wide { width: 200px; }
+  .bar-wrap { flex: 1; background: var(--bg3); border-radius: 4px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 4px; transition: width 0.3s; }
+  .bar-val { width: 60px; text-align: right; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+
+  /* Stat box */
+  .stat { text-align: center; }
+  .stat-val { font-size: 32px; font-weight: 700; letter-spacing: -1px; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Pill */
+  .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+  .pill-green { background: rgba(52,211,153,0.15); color: var(--green); }
+  .pill-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); }
+  .pill-red { background: rgba(248,113,113,0.15); color: var(--red); }
+  .pill-blue { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .pill-orange { background: rgba(251,146,60,0.15); color: var(--orange); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--border); font-weight: 600; }
+  td { padding: 8px 12px 8px 0; border-bottom: 1px solid rgba(42,51,71,0.5); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Diagnostic card */
+  .diag-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .diag-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .diag-val { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .diag-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .diag-flag { font-size: 12px; margin-top: 8px; padding: 6px 10px; border-radius: 6px; }
+  .diag-flag-warn { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); color: var(--yellow); }
+  .diag-flag-bad { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: var(--red); }
+  .diag-flag-ok { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: var(--green); }
+
+  /* Observation */
+  .obs { background: var(--bg2); border-left: 3px solid var(--accent2); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; }
+  .obs-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .obs-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* Goal alignment */
+  .goal-row { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 12px; }
+  .goal-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .goal-name { font-weight: 600; font-size: 14px; }
+  .goal-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .goal-progress { margin-top: 10px; }
+  .goal-progress-bar { background: var(--bg3); border-radius: 4px; height: 6px; margin-top: 6px; }
+  .goal-progress-fill { height: 6px; border-radius: 4px; }
+
+  /* Automation card */
+  .auto-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 14px; }
+  .auto-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .auto-rank { font-size: 22px; font-weight: 800; color: var(--bg3); width: 32px; flex-shrink: 0; }
+  .auto-outcome { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; flex: 1; }
+  .auto-badges { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+  .badge-quick { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-medium { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+  .badge-big { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+  .auto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .auto-grid { grid-template-columns: 1fr; } }
+  .auto-cell { background: var(--bg3); border-radius: 8px; padding: 12px; }
+  .auto-cell-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); font-weight: 600; margin-bottom: 5px; }
+  .auto-cell-text { font-size: 12px; line-height: 1.5; color: var(--text); }
+  .auto-hours { margin-top: 14px; display: flex; align-items: center; gap: 8px; }
+  .auto-hours-val { font-size: 20px; font-weight: 700; color: var(--green); }
+  .auto-hours-label { font-size: 12px; color: var(--muted); }
+  .auto-draft { font-size: 10px; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+  /* Sources */
+  .source-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .source-row:last-child { border-bottom: none; }
+  .source-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .source-name { font-weight: 600; width: 140px; flex-shrink: 0; }
+  .source-range { color: var(--muted); }
+  .source-note { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+  /* Day heat */
+  .day-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .day-cell { background: var(--bg3); border-radius: 6px; padding: 10px 8px; text-align: center; }
+  .day-cell-name { font-size: 10px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+  .day-cell-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .day-cell-val { font-size: 18px; font-weight: 700; margin-top: 4px; }
+  .day-cell-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-left { font-size: 12px; color: var(--muted); }
+  .footer-right { font-size: 12px; color: var(--muted); }
+  .footer-link { color: var(--accent); text-decoration: none; }
+
+  /* Inline list */
+  .inline-list { list-style: none; }
+  .inline-list li { padding: 5px 0; border-bottom: 1px solid rgba(42,51,71,0.4); font-size: 13px; }
+  .inline-list li:last-child { border-bottom: none; }
+
+  /* Callout */
+  .callout { background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.25); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--text); margin-top: 12px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-name">Casey Nixon — Time Audit</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px;">Investor, Mercato Partners · Growth Equity</div>
+      </div>
+      <div class="header-meta">
+        <div class="header-date">Generated April 24, 2026</div>
+        <div class="header-date" style="margin-top:4px;">14-weekday window: Apr 6 – Apr 24, 2026</div>
+      </div>
+    </div>
+    <div class="header-goal">
+      <div class="label">#1 Goal This Quarter</div>
+      <div class="value">LP Fundraising — 3 LP meetings per week, consistently</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: HOW I ACTUALLY SPEND MY TIME -->
+  <div class="section">
+    <div class="section-title">How I Actually Spend My Time <span class="num">§1</span></div>
+
+    <!-- App Usage -->
+    <div style="margin-bottom:24px;">
+      <div class="card-title" style="margin-bottom:16px;">APP USAGE — 14 weekdays, 8am–6:30pm · 58.6h total tracked</div>
+      <div class="grid-2" style="gap:24px;">
+        <div>
+          <div class="bar-row">
+            <span class="bar-label">Chrome</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#4f8ef7;"></div></div>
+            <span class="bar-val">28.4h · 48%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Notion</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:24%;background:#7c66db;"></div></div>
+            <span class="bar-val">6.7h · 11%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Claude</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:17%;background:#34d399;"></div></div>
+            <span class="bar-val">4.8h · 8%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Outlook</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:13%;background:#fb923c;"></div></div>
+            <span class="bar-val">3.8h · 6%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Parallels/Win</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:13%;background:#6b7280;"></div></div>
+            <span class="bar-val">3.6h · 6%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Teams</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:13%;background:#7c66db;"></div></div>
+            <span class="bar-val">3.6h · 6%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Messages</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:10%;background:#fbbf24;"></div></div>
+            <span class="bar-val">2.8h · 5%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Granola</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:7%;background:#34d399;"></div></div>
+            <span class="bar-val">2.2h · 4%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Zoom</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:2%;background:#4f8ef7;"></div></div>
+            <span class="bar-val">0.5h · 1%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Wispr Flow</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:1%;background:#34d399;"></div></div>
+            <span class="bar-val">0.3h · &lt;1%</span>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="height:100%;">
+            <div class="card-title">WHAT EACH APP IS FOR</div>
+            <table>
+              <tr><td style="font-weight:600;">Chrome</td><td style="color:var(--muted);">LinkedIn sourcing, PitchBook research, Gmail, Google Docs, all web work</td></tr>
+              <tr><td style="font-weight:600;">Notion</td><td style="color:var(--muted);">Deal notes, CRM, thesis research, internal docs</td></tr>
+              <tr><td style="font-weight:600;">Claude</td><td style="color:var(--muted);">AI analysis, research, memo drafting, IOIs</td></tr>
+              <tr><td style="font-weight:600;">Outlook</td><td style="color:var(--muted);">Email + calendar management</td></tr>
+              <tr><td style="font-weight:600;">Parallels</td><td style="color:var(--muted);">Windows apps running on Mac (unclear which)</td></tr>
+              <tr><td style="font-weight:600;">Teams</td><td style="color:var(--muted);">Internal firm chat, deal discussions, LP updates</td></tr>
+              <tr><td style="font-weight:600;">Messages</td><td style="color:var(--muted);">External outreach, founder/LP texting</td></tr>
+              <tr><td style="font-weight:600;">Granola</td><td style="color:var(--muted);">Meeting notes and transcripts</td></tr>
+              <tr><td style="font-weight:600;">Wispr Flow</td><td style="color:var(--muted);">AI voice dictation</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browser breakdown -->
+    <div style="margin-bottom:24px;">
+      <div class="card-title" style="margin-bottom:16px;">BROWSER ACTIVITY — Chrome (3,739 work-hours visits across 14 weekdays)</div>
+      <div class="grid-2" style="gap:16px;">
+        <div class="card">
+          <div class="card-title">TOP DOMAINS</div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">LinkedIn</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#4f8ef7;"></div></div>
+            <span class="bar-val">926 · 25%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Google (search)</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:53%;background:#7c66db;"></div></div>
+            <span class="bar-val">489 · 13%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Gmail</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:42%;background:#fb923c;"></div></div>
+            <span class="bar-val">391 · 10%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Google Docs</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:16%;background:#34d399;"></div></div>
+            <span class="bar-val">150 · 4%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">PitchBook</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:16%;background:#fbbf24;"></div></div>
+            <span class="bar-val">147 · 4%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">SharePoint</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:10%;background:#6b7280;"></div></div>
+            <span class="bar-val">95 · 3%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Canva</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:8%;background:#6b7280;"></div></div>
+            <span class="bar-val">75 · 2%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Affinity CRM</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:2%;background:#6b7280;"></div></div>
+            <span class="bar-val">22 · 1%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">Facebook</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:6%;background:#f87171;"></div></div>
+            <span class="bar-val">52 · 1% <span class="pill pill-yellow">⚠ social</span></span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label bar-label-wide">YouTube</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:4%;background:#f87171;"></div></div>
+            <span class="bar-val">34 · 1% <span class="pill pill-yellow">⚠ social</span></span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">BY CATEGORY</div>
+          <div style="margin-bottom:16px;">
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">CRM / Research</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#4f8ef7;"></div></div>
+              <span class="bar-val">1,084 · 29%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">Comms / Email</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:38%;background:#fb923c;"></div></div>
+              <span class="bar-val">410 · 11%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">Docs / SharePoint</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:29%;background:#34d399;"></div></div>
+              <span class="bar-val">312 · 8%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">Social / Video</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:10%;background:#f87171;"></div></div>
+              <span class="bar-val">105 · 3%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">AI Tools (browser)</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:0.4%;background:#7c66db;"></div></div>
+              <span class="bar-val">10 · &lt;1%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label bar-label-wide">Other</span>
+              <div class="bar-wrap"><div class="bar-fill" style="width:65%;background:#6b7280;"></div></div>
+              <span class="bar-val">1,755 · 47%</span>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Note on "Other":</strong> Chase bank (205 visits), Expensify, medical (MyChart), Delta/travel, DocuSign, Ticketmaster, KSL classifieds — these are personal tasks happening during work hours. Significant leak.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meeting breakdown -->
+    <div style="margin-bottom:24px;">
+      <div class="card-title" style="margin-bottom:16px;">MEETINGS — 36 meetings · 32.8h · 3.6h avg per day</div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="card">
+          <div class="card-title">BY TYPE</div>
+          <div class="bar-row">
+            <span class="bar-label">External</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#4f8ef7;"></div></div>
+            <span class="bar-val">12.8h · 14</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Solo / Focus</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:99%;background:#34d399;"></div></div>
+            <span class="bar-val">12.6h · 10</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Team Internal</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:52%;background:#7c66db;"></div></div>
+            <span class="bar-val">6.7h · 10</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">1:1 Internal</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:6%;background:#fbbf24;"></div></div>
+            <span class="bar-val">0.8h · 2</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">RECURRING MEETINGS</div>
+          <ul class="inline-list">
+            <li>Portfolio Coordination <span class="pill pill-blue">2x/period</span></li>
+            <li>Pipeline Coordination <span class="pill pill-blue">2x/period</span></li>
+            <li>LP & Fundraising (internal) <span class="pill pill-blue">2x/period</span></li>
+            <li>Internal Meeting <span class="pill pill-blue">2x/period</span></li>
+            <li>Ryan + Casey Weekly <span class="pill pill-blue">weekly</span></li>
+            <li>Austin (superday candidate) <span class="pill pill-orange">2x</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">BACK-TO-BACK CLUSTERS</div>
+          <ul class="inline-list" style="font-size:12px;">
+            <li>Apr 3 · Kalderos → Ryan catch-up (0min gap)</li>
+            <li>Apr 8 · Caden → OW review (0min gap)</li>
+            <li>Apr 13 · AOG → AOG Debrief (0min gap)</li>
+            <li>Apr 14 · Call → Finite State → Austin (0min gaps)</li>
+            <li>Apr 15 · Bala+S3+Silverton+Trinity (chain of 4)</li>
+          </ul>
+          <div style="margin-top:10px;font-size:12px;color:var(--red);">Apr 15 had 4 back-to-back external meetings — no recovery time between LP/VC calls.</div>
+        </div>
+      </div>
+
+      <!-- Day-by-day -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom:12px;">MEETING LOAD BY DAY</div>
+        <div class="day-grid">
+          <div class="day-cell">
+            <div class="day-cell-name">Mon</div><div class="day-cell-date">Apr 6</div>
+            <div class="day-cell-val" style="color:var(--yellow);">4.0h</div>
+            <div class="day-cell-sub">heavy</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Tue</div><div class="day-cell-date">Apr 7</div>
+            <div class="day-cell-val" style="color:var(--green);">1.2h</div>
+            <div class="day-cell-sub">light</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Wed</div><div class="day-cell-date">Apr 8</div>
+            <div class="day-cell-val" style="color:var(--yellow);">3.8h</div>
+            <div class="day-cell-sub">heavy</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Thu</div><div class="day-cell-date">Apr 9</div>
+            <div class="day-cell-val" style="color:var(--green);">0.5h</div>
+            <div class="day-cell-sub">lightest</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Fri</div><div class="day-cell-date">Apr 10</div>
+            <div class="day-cell-val" style="color:var(--green);">1.0h</div>
+            <div class="day-cell-sub">326 switches</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Mon</div><div class="day-cell-date">Apr 13</div>
+            <div class="day-cell-val" style="color:var(--red);">5.2h</div>
+            <div class="day-cell-sub">AOG + LP cluster</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Tue</div><div class="day-cell-date">Apr 14</div>
+            <div class="day-cell-val" style="color:var(--red);">6.0h</div>
+            <div class="day-cell-sub">back-to-back chain</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Wed</div><div class="day-cell-date">Apr 15</div>
+            <div class="day-cell-val" style="color:var(--red);">8.0h</div>
+            <div class="day-cell-sub">busiest — 4 LP/VC</div>
+          </div>
+          <div class="day-cell" style="background:var(--bg);">
+            <div class="day-cell-name" style="color:var(--bg3);">—</div>
+            <div class="day-cell-date" style="color:var(--bg3);">no data</div>
+            <div class="day-cell-val" style="color:var(--bg3);">—</div>
+          </div>
+          <div class="day-cell" style="background:var(--bg);">
+            <div class="day-cell-name" style="color:var(--bg3);">—</div>
+            <div class="day-cell-date" style="color:var(--bg3);">no data</div>
+            <div class="day-cell-val" style="color:var(--bg3);">—</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Mon</div><div class="day-cell-date">Apr 20</div>
+            <div class="day-cell-val" style="color:var(--yellow);">—</div>
+            <div class="day-cell-sub">Superday</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Tue</div><div class="day-cell-date">Apr 21</div>
+            <div class="day-cell-val" style="color:var(--yellow);">—</div>
+            <div class="day-cell-sub">6 meetings</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Wed</div><div class="day-cell-date">Apr 22</div>
+            <div class="day-cell-val" style="color:var(--yellow);">—</div>
+            <div class="day-cell-sub">4 meetings</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Thu</div><div class="day-cell-date">Apr 23</div>
+            <div class="day-cell-val" style="color:var(--yellow);">—</div>
+            <div class="day-cell-sub">5 meetings</div>
+          </div>
+          <div class="day-cell">
+            <div class="day-cell-name">Fri</div><div class="day-cell-date">Apr 24</div>
+            <div class="day-cell-val" style="color:var(--green);">today</div>
+            <div class="day-cell-sub">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email + Teams -->
+    <div>
+      <div class="card-title" style="margin-bottom:16px;">EMAIL & TEAMS — last 30 days sent mail + last 2 weeks Teams</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">WHAT YOU SEND REPEATEDLY (EMAIL)</div>
+          <ul class="inline-list" style="font-size:13px;">
+            <li>Calendar accept/declines for meetings <span class="pill pill-red">high volume</span></li>
+            <li>Intro scheduling emails (15-min / 30-min Calendly links)</li>
+            <li>Deal reference follow-ups (SCORE, Textla, Kalderos)</li>
+            <li>Investor intros (General Atlantic / Treeswift, Lucid Bots)</li>
+            <li>Catch-up confirmations with VC network (Carter, Graham, Noah, Jake)</li>
+            <li>Deal feedback and next steps (Kalderos scenario planning)</li>
+          </ul>
+          <div class="callout" style="margin-top:12px;">
+            <strong>Pattern:</strong> A large portion of sent email is reactive scheduling — accepting/declining calendar invites and sending Calendly links. This is delegatable.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">WHAT'S HAPPENING IN TEAMS</div>
+          <ul class="inline-list" style="font-size:13px;">
+            <li>🏆 AOG signed term sheet — big LP win for Fund V</li>
+            <li>Search Atlas IC prep — Greg commended Dave's work</li>
+            <li>Associate Superday debrief (Austin, Grant, Moiz evaluations)</li>
+            <li>Casey writing inline deal memos (Plutus, Moiz/analytics pass)</li>
+            <li>Paytient deck shared by Ben — active diligence</li>
+            <li>Obviant: Casey messaged — "$200K→$5M ARR, gov contracting API" <span class="pill pill-green">excited</span></li>
+            <li>AI/hackathon discussions (Wyatt Wilson leading)</li>
+            <li>Granola transcript links shared post-meetings</li>
+          </ul>
+          <div class="callout" style="margin-top:12px;">
+            <strong>Who messages Casey most:</strong> Ryan Sanders (primary internal collab), Dave Boyce, Mei Headley, Josh Christensen, Ben Davis, Wyatt Wilson.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2: KEY DIAGNOSTICS -->
+  <div class="section">
+    <div class="section-title">Key Diagnostics <span class="num">§2</span></div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="diag-card">
+        <div class="diag-label">Context Switching Rate</div>
+        <div class="diag-val">169<span style="font-size:16px;font-weight:400;color:var(--muted);"> / day avg</span></div>
+        <div class="diag-sub">Worst day: Apr 10 — 326 switches in 7h = 1 switch every 1.3 minutes</div>
+        <div class="diag-flag diag-flag-bad">🔴 Extremely fragmented. No meaningful deep work possible at this rate.</div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-label">Meeting Load vs. Deep Work</div>
+        <div class="diag-val">3.6h<span style="font-size:16px;font-weight:400;color:var(--muted);"> meetings/day</span></div>
+        <div class="diag-sub">Heaviest: Apr 15 at 8.0h of meetings. Lightest: Apr 9 at 0.5h.</div>
+        <div class="diag-flag diag-flag-warn">🟡 Meeting load is manageable on average, but clustering creates zero-DW days.</div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-label">Reactive vs. Proactive Split</div>
+        <div class="diag-val">~80%<span style="font-size:16px;font-weight:400;color:var(--muted);"> reactive</span></div>
+        <div class="diag-sub">Solo/focus blocks: 0.9h/day. LinkedIn reactive browsing: ~4h/day in Chrome.</div>
+        <div class="diag-flag diag-flag-bad">🔴 Proactive work (LP outreach, thesis research) is getting squeezed out.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">TOP 3 TIME DRAINS</div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Drain</th><th>Evidence</th><th>Cost Estimate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td><strong>LinkedIn manual research</strong></td>
+            <td>926 visits in 14 days = 66 visits/day. #1 browser activity at 25% of all work-hours visits. Used for sourcing research, but done page-by-page with no system.</td>
+            <td><span class="pill pill-red">~6–8h/week</span></td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td><strong>Email / calendar triaging</strong></td>
+            <td>Outlook at 3.8h tracked. Sent email full of accept/decline + Calendly link replies. Calendar management is happening manually across 14+ recurring decisions/week.</td>
+            <td><span class="pill pill-red">~3–5h/week</span></td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td><strong>Personal tasks during work hours</strong></td>
+            <td>Chase bank (205 visits), Expensify, MyChart, Delta travel, Ticketmaster, KSL classifieds — all during 8am–6:30pm window. These collectively represent ~10–15% of browser time.</td>
+            <td><span class="pill pill-yellow">~2–3h/week</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sharp observations -->
+    <div class="obs">
+      <div class="obs-title">📊 LinkedIn is operating as a manual CRM — but it's costing 66 visits/day</div>
+      <div class="obs-body">Your #1 browser activity isn't email or PitchBook — it's LinkedIn at 926 visits in 14 workdays. This signals that sourcing and relationship research is happening manually, profile by profile. Affinity CRM only logged 22 visits in the same period, meaning the data you're finding isn't making it back to your system. You're doing the work twice — or it's disappearing.</div>
+    </div>
+    <div class="obs">
+      <div class="obs-title">🔄 Apr 10 was your worst day — 326 context switches in 7h — and it was a light meeting day</div>
+      <div class="obs-body">Light meeting days should be your deep work days. Instead, Apr 10 (lowest meeting load in the first week) had your highest app-switching rate by far. This suggests unstructured "free" time fills with reactive browsing and tool-hopping rather than intentional LP outreach or thesis work. The absence of meetings isn't creating deep work — it's creating noise.</div>
+    </div>
+    <div class="obs">
+      <div class="obs-title">📝 Deal analysis is happening in Teams chat, not in structured artifacts</div>
+      <div class="obs-body">You wrote detailed deal feedback for Moiz and Plutus directly in Teams messages. The analysis is sharp, but it's buried in chat threads with no structure. Granola links are being posted into Teams channels after meetings — but the loop from transcript → structured memo → IC doesn't appear to be automated. Each deal is touching you 3–4 times manually when it could touch you once.</div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 3: GOAL ALIGNMENT -->
+  <div class="section">
+    <div class="section-title">Goal Alignment <span class="num">§3</span></div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <div class="goal-name">🎯 Goal 1: LP Fundraising — 3 LP meetings per week</div>
+        <span class="pill pill-yellow">⚠ Not consistently hitting</span>
+      </div>
+      <div class="goal-body">
+        <strong>What the data shows:</strong> One confirmed LP week in the window — Apr 15 week saw 4 LP/VC-adjacent external meetings (Mercury Fund / Samantha Lewis, Rajiv/Clutch, S3/Charlie, Silverton, Trinity Capital). But the prior week (Apr 7–11) had only 2 external investor meetings total. This week (Apr 21–24): 1 confirmed LP (Athos, Tuesday) with 2 more still needed by end of today.
+        <br><br>
+        <strong>What's eating this time:</strong> Calendar data shows LP meeting setup is reactive (scheduling via email chains), follow-through is inconsistent (no follow-up drafts visible in sent mail after external LP calls), and the busiest LP days cluster unpredictably rather than being a steady 3/week cadence.
+        <br><br>
+        <strong>Missing from the data:</strong> No dedicated LP outreach blocks visible in calendar. No follow-up drafts being generated systematically post-LP meeting.
+      </div>
+      <div class="goal-progress">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
+          <span>Best week: ~4 LP/VC meetings</span><span>Target: 3 LP/week</span>
+        </div>
+        <div class="goal-progress-bar"><div class="goal-progress-fill" style="width:55%;background:var(--yellow);"></div></div>
+      </div>
+    </div>
+
+    <div class="goal-row">
+      <div class="goal-header">
+        <div class="goal-name">🎯 Goal 2: Thesis-Driven Sourcing — 1 new deal per week</div>
+        <span class="pill pill-green">✅ Largely hitting</span>
+      </div>
+      <div class="goal-body">
+        <strong>What the data shows:</strong> External meeting pattern shows consistent founder/startup meetings: Finite State (Apr 14), Jackie/Redo (Apr 13), Obviant (Apr 23), Claire/Vamo (Apr 22), Allen Liou/Assembly HOA (Apr 23 — confirmed AINS fit). 1+ new company meetings per week appears to be happening.
+        <br><br>
+        <strong>What's eating this time:</strong> LinkedIn at 66 visits/day suggests research is the bottleneck, not meetings. You're finding companies but analyzing them manually. Deal memos and feedback (Moiz, Plutus) are happening in Teams without a structured artifact pipeline.
+        <br><br>
+        <strong>Opportunity:</strong> Automating the Granola → memo → Teams pipeline would free time to identify more thesis-fit companies proactively rather than reactively.
+      </div>
+      <div class="goal-progress">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
+          <span>Current: ~1.2 new company meetings/week</span><span>Target: 1/week thesis-fit</span>
+        </div>
+        <div class="goal-progress-bar"><div class="goal-progress-fill" style="width:80%;background:var(--green);"></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">TIME GOING TO NON-NEEDLE-MOVERS</div>
+      <table>
+        <thead><tr><th>Activity</th><th>Estimated Weekly Time</th><th>Moves LP Goal?</th><th>Moves Deal Goal?</th></tr></thead>
+        <tbody>
+          <tr><td>LinkedIn manual research</td><td>6–8h</td><td style="color:var(--red);">✗ Indirect</td><td style="color:var(--yellow);">⚠ Partially</td></tr>
+          <tr><td>Calendar accept/decline email</td><td>3–5h</td><td style="color:var(--red);">✗</td><td style="color:var(--red);">✗</td></tr>
+          <tr><td>Personal tasks in work hours</td><td>2–3h</td><td style="color:var(--red);">✗</td><td style="color:var(--red);">✗</td></tr>
+          <tr><td>Internal team meetings</td><td>3–4h</td><td style="color:var(--red);">✗</td><td style="color:var(--red);">✗</td></tr>
+          <tr><td>Deal feedback memos (manual)</td><td>1–2h</td><td style="color:var(--red);">✗</td><td style="color:var(--green);">✓ Yes</td></tr>
+          <tr><td>LP outreach + follow-up (proactive)</td><td style="color:var(--red);">&lt;1h visible</td><td style="color:var(--green);">✓ Yes</td><td style="color:var(--red);">✗</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: AUTOMATION OPPORTUNITIES -->
+  <div class="section">
+    <div class="section-title">Automation Opportunities <span class="num">§4</span></div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Ranked by: hours reclaimed × direct tie to LP goal. All labeled draft.</div>
+
+    <!-- #1 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#1</div>
+        <div class="auto-outcome">LP follow-up happens without you thinking about it</div>
+        <div class="auto-badges">
+          <span class="badge badge-medium">Medium lift · half day</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">After each LP meeting, follow-up is manual — no draft exists, no trigger fires. Sent email shows no follow-up emails in the 48h after LP external calls. The bottleneck isn't meetings, it's momentum dying after the call ends.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">Trigger: Granola transcript posted to Teams after an LP call. AI reads transcript → drafts a personalized follow-up email → posts draft in Teams for 1-click approve+send. Done before you close your laptop.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">3–4h</div>
+        <div class="auto-hours-label">reclaimed per week · directly moves LP goal</div>
+      </div>
+      <div class="auto-draft">Draft — estimated, based on observed sent-mail patterns. Actual savings vary.</div>
+    </div>
+
+    <!-- #2 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#2</div>
+        <div class="auto-outcome">Thesis-fit sourcing comes to you — not the other way around</div>
+        <div class="auto-badges">
+          <span class="badge badge-big">Big build · multi-session</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">66 LinkedIn visits per day during work hours. You're manually browsing to research founders and companies — a page-by-page process with no system. PitchBook is visited separately (147 times) and Affinity CRM only 22 times, meaning research doesn't flow back to your CRM.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">A weekly sourcing agent runs against your Physical Vertical AI + AINS thesis criteria using PitchBook + LinkedIn data, surfaces 5–10 pre-screened companies each Monday, and pre-populates your Notion Founder CRM with a brief + outreach draft. You review, not research.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">5–8h</div>
+        <div class="auto-hours-label">reclaimed per week · moves deal sourcing goal</div>
+      </div>
+      <div class="auto-draft">Draft — estimated based on 66 LinkedIn visits/day observed in Chrome history.</div>
+    </div>
+
+    <!-- #3 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#3</div>
+        <div class="auto-outcome">Every meeting produces a structured deal artifact — automatically</div>
+        <div class="auto-badges">
+          <span class="badge badge-quick">Quick win · under 2h</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">Casey writes deal feedback inline in Teams (Moiz, Plutus) and Granola links get posted manually. There's no automatic pipeline from Granola transcript → structured deal note → Notion Founder CRM entry. Each deal touches you 3–4 times manually.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">Trigger: Granola meeting ends. Hook reads transcript, extracts: company name, ARR, thesis fit score, key signals, open questions, recommended next step. Posts structured note to Notion Founder CRM and drops summary in the relevant Teams thread. Requires your confirmation, not your writing.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">2–3h</div>
+        <div class="auto-hours-label">reclaimed per week · improves pipeline quality</div>
+      </div>
+      <div class="auto-draft">Draft — estimated based on Teams message patterns and Granola usage (2.2h tracked).</div>
+    </div>
+
+    <!-- #4 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#4</div>
+        <div class="auto-outcome">Scheduling and calendar management happens without your attention</div>
+        <div class="auto-badges">
+          <span class="badge badge-medium">Medium lift · half day</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">Sent email is full of calendar accept/declines and Calendly link replies. Outlook tracked at 3.8h over 14 days of logged time. Each scheduling exchange is 2–4 back-and-forth emails that require your attention but no real judgment.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">AI monitors your inbox for meeting requests, checks calendar for LP-priority slots, auto-sends Calendly or proposes times based on rules you set (e.g., LP meetings get Tue–Thu 9–11am slots first). You only touch high-judgment scheduling decisions.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">2–3h</div>
+        <div class="auto-hours-label">reclaimed per week</div>
+      </div>
+      <div class="auto-draft">Draft — estimated based on Outlook usage and volume of scheduling emails in sent folder.</div>
+    </div>
+
+    <!-- #5 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#5</div>
+        <div class="auto-outcome">Weekly LP goal tracking is always visible — no manual calculation</div>
+        <div class="auto-badges">
+          <span class="badge badge-quick">Quick win · under 2h</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">Tracking LP meetings vs. 3/week goal requires a manual conversation (as we had today). Calendar categorization is ambiguous — some "LP" meetings are internal, some external LP meetings are off-calendar entirely (Athos wasn't on Outlook). No live dashboard exists.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">A Monday-morning summary message (via Teams or email) shows: LP meetings completed last week vs. 3-meeting goal, new deals sourced vs. 1/week goal, who needs follow-up. Pulls from Outlook calendar + Notion CRM. Takes 30 seconds to read, requires no manual aggregation.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">1h</div>
+        <div class="auto-hours-label">reclaimed per week · improves goal consistency</div>
+      </div>
+      <div class="auto-draft">Draft — quick win, could be built in a single session as a scheduled agent.</div>
+    </div>
+
+    <!-- #6 -->
+    <div class="auto-card">
+      <div class="auto-header">
+        <div class="auto-rank">#6</div>
+        <div class="auto-outcome">VC network meetings produce warm intros to LPs — not just relationship maintenance</div>
+        <div class="auto-badges">
+          <span class="badge badge-medium">Medium lift · half day</span>
+        </div>
+      </div>
+      <div class="auto-grid">
+        <div class="auto-cell">
+          <div class="auto-cell-label">What's happening today</div>
+          <div class="auto-cell-text">VC catch-ups (Zach Jaffe/Glasswing, Carter/Lightbank, Jake/Arthur Ventures) are happening but the LP referral loop is informal. Zach suggested searching "investment office" + Kellogg for LP leads in a prior call — this advice isn't being systematically acted on.</div>
+        </div>
+        <div class="auto-cell">
+          <div class="auto-cell-label">What the automated version looks like</div>
+          <div class="auto-cell-text">After each VC catch-up, Granola transcript is parsed for LP referral leads mentioned in conversation. AI extracts names, companies, intro suggestions → creates a Notion task with a draft intro request message. You review and send. Network meetings become a LP lead funnel.</div>
+        </div>
+      </div>
+      <div class="auto-hours">
+        <div class="auto-hours-val">1–2h</div>
+        <div class="auto-hours-label">reclaimed per week + compounding LP pipeline value</div>
+      </div>
+      <div class="auto-draft">Draft — estimated based on VC meeting frequency and Teams/Granola patterns observed.</div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 5: DATA SOURCES -->
+  <div class="section">
+    <div class="section-title">Data Sources <span class="num">§5</span></div>
+    <div class="card">
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--green);"></div>
+        <div class="source-name">Mac App Usage</div>
+        <div class="source-range">Apr 6 – Apr 24, 2026 · 14 weekdays · 8am–6:30pm filter</div>
+        <div class="source-note">4,634 records from ~/Library/Application Support/Knowledge/knowledgeC.db</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--green);"></div>
+        <div class="source-name">Chrome History</div>
+        <div class="source-range">Apr 6 – Apr 24, 2026 · 3,739 work-hours visits</div>
+        <div class="source-note">Chrome Default profile (Casey Nixon / caseynixon21@gmail.com) · personal Gmail, but primary work browser</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--green);"></div>
+        <div class="source-name">Outlook Calendar</div>
+        <div class="source-range">Apr 3 – Apr 24, 2026 · 36 non-cancelled meetings</div>
+        <div class="source-note">Via Microsoft 365 MCP · weekdays only, all-day events excluded</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--green);"></div>
+        <div class="source-name">Outlook Email</div>
+        <div class="source-range">Mar 25 – Apr 24, 2026 · 50 sent emails analyzed</div>
+        <div class="source-note">Sent Items folder · pattern analysis only, no content stored</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--green);"></div>
+        <div class="source-name">Microsoft Teams</div>
+        <div class="source-range">Apr 10 – Apr 24, 2026 · 50 messages analyzed</div>
+        <div class="source-note">Most recent 2 weeks · deal discussions, firm announcements, internal chats</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--yellow);"></div>
+        <div class="source-name">Granola</div>
+        <div class="source-range">Not directly queried</div>
+        <div class="source-note">Granola app usage tracked (2.2h) but transcript content not pulled in this audit</div>
+      </div>
+      <div class="source-row">
+        <div class="source-dot" style="background:var(--yellow);"></div>
+        <div class="source-name">Slack</div>
+        <div class="source-range">Minimal usage detected</div>
+        <div class="source-note">0.1h tracked in app usage. Mercato appears to use Teams as primary async tool.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">Time Audit — April 24, 2026 | Part of Casey Nixon's AI Builder Automation Portfolio</div>
+    <div class="footer-right">Built with Claude Code · Data sources: Mac Screen Time, Chrome, Outlook, Teams</div>
+  </div>
+
+</div>
+</body>
+</html>

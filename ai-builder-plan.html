@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Builder Plan — Casey Nixon</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b27;
+    --bg3: #1e2535;
+    --border: #2a3347;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --muted2: #4a5568;
+    --accent: #4f8ef7;
+    --accent2: #7c66db;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --orange: #fb923c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Inter', 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .page { max-width: 1060px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Header ── */
+  .header { border-bottom: 1px solid var(--border); padding-bottom: 32px; margin-bottom: 48px; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .header-name { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header-date { font-size: 13px; color: var(--muted); text-align: right; }
+  .header-goal { margin-top: 18px; background: var(--bg3); border: 1px solid var(--accent); border-radius: 8px; padding: 12px 18px; display: inline-flex; flex-direction: column; gap: 3px; }
+  .header-goal .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent); font-weight: 700; }
+  .header-goal .value { font-size: 14px; font-weight: 600; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 52px; }
+  .section-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-num { font-size: 11px; color: var(--muted); font-weight: 500; background: var(--bg3); padding: 2px 8px; border-radius: 10px; }
+
+  /* ── Time summary ── */
+  .insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .insight-grid { grid-template-columns: 1fr; } }
+  .insight-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; position: relative; overflow: hidden; }
+  .insight-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .insight-card.red::before { background: var(--red); }
+  .insight-card.yellow::before { background: var(--yellow); }
+  .insight-card.blue::before { background: var(--accent); }
+  .insight-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .insight-headline { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; line-height: 1.35; }
+  .insight-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .insight-stat { font-size: 24px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+  .audit-link { margin-top: 16px; text-align: right; font-size: 13px; color: var(--muted); }
+
+  /* ── Build cards ── */
+  .build-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 14px; position: relative; }
+  .build-card-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+  .build-rank { font-size: 11px; font-weight: 700; color: var(--muted); background: var(--bg3); border-radius: 6px; padding: 4px 8px; flex-shrink: 0; letter-spacing: 0.5px; white-space: nowrap; }
+  .build-outcome { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; flex: 1; line-height: 1.3; }
+  .build-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; flex-shrink: 0; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+  .badge-quick { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.25); }
+  .badge-medium { background: rgba(251,191,36,0.12); color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
+  .badge-big { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+  .badge-status { background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
+  .build-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 640px) { .build-detail-grid { grid-template-columns: 1fr; } }
+  .build-cell { background: var(--bg3); border-radius: 8px; padding: 12px 14px; }
+  .build-cell-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+  .build-cell-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+  .build-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+  .build-hours { display: flex; align-items: baseline; gap: 6px; }
+  .build-hours-val { font-size: 22px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
+  .build-hours-label { font-size: 12px; color: var(--muted); }
+  .impact-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
+  .impact-high { background: rgba(79,142,247,0.12); color: var(--accent); border: 1px solid rgba(79,142,247,0.25); }
+  .impact-medium { background: rgba(124,102,219,0.12); color: var(--accent2); border: 1px solid rgba(124,102,219,0.25); }
+
+  /* ── Sprint placeholders ── */
+  .sprint-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  @media (max-width: 900px) { .sprint-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .sprint-grid { grid-template-columns: 1fr 1fr; } }
+  .sprint-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 16px; opacity: 0.45; }
+  .sprint-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted2); margin-bottom: 10px; }
+  .sprint-title { font-size: 13px; font-weight: 600; color: var(--muted); line-height: 1.35; margin-bottom: 12px; }
+  .sprint-coming { font-size: 11px; color: var(--muted2); font-style: italic; }
+  .sprint-icon { font-size: 22px; margin-bottom: 10px; }
+
+  /* ── Footer ── */
+  .footer { border-top: 1px solid var(--border); padding-top: 22px; margin-top: 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-text { font-size: 12px; color: var(--muted); }
+
+  /* Current sprint label */
+  .sprint-current-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--accent); background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.2); border-radius: 6px; padding: 4px 10px; margin-bottom: 16px; }
+  .sprint-current-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-name">Casey Nixon — AI Builder Plan</div>
+        <div class="header-sub">Investor, Mercato Partners · Growth Equity · Sprint 1</div>
+      </div>
+      <div class="header-date">
+        <div>April 24, 2026</div>
+        <div style="margin-top:4px;color:var(--muted2);">AI Builder · L2</div>
+      </div>
+    </div>
+    <div class="header-goal">
+      <div class="label">#1 Goal This Quarter</div>
+      <div class="value">LP Fundraising — 3 LP meetings per week, consistently</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: TIME SUMMARY ── -->
+  <div class="section">
+    <div class="section-title">What I Learned From My Time Audit <span class="section-num">§1</span></div>
+    <div class="insight-grid">
+
+      <div class="insight-card red">
+        <div class="insight-num">Finding 01</div>
+        <div class="insight-stat" style="color:var(--red);">169</div>
+        <div class="insight-headline">Context switches per day — with 326 on my worst day</div>
+        <div class="insight-body">My lightest meeting day had the highest app-switching rate. Free time isn't becoming deep work — it's becoming noise. No focused LP outreach is happening in those gaps.</div>
+      </div>
+
+      <div class="insight-card yellow">
+        <div class="insight-num">Finding 02</div>
+        <div class="insight-stat" style="color:var(--yellow);">66×</div>
+        <div class="insight-headline">LinkedIn visits per day — manual research, no system</div>
+        <div class="insight-body">LinkedIn is my #1 browser activity at 25% of all work-hour visits. I'm researching founders and companies page by page. PitchBook gets 147 visits; my Affinity CRM gets 22 — meaning none of it flows back to my system.</div>
+      </div>
+
+      <div class="insight-card blue">
+        <div class="insight-num">Finding 03</div>
+        <div class="insight-stat" style="color:var(--accent);">1 / 3</div>
+        <div class="insight-headline">LP meetings this week vs. 3-per-week goal</div>
+        <div class="insight-body">LP meetings cluster unpredictably instead of running at a steady cadence. Follow-up emails after LP calls aren't visible in sent mail — momentum dies when the call ends. The bottleneck isn't meetings, it's what happens after.</div>
+      </div>
+
+    </div>
+    <div class="audit-link">
+      <a href="time-audit.html">Full Time Audit →</a>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: WHAT I'M BUILDING ── -->
+  <div class="section">
+    <div class="section-title">What I'm Building <span class="section-num">§2</span></div>
+    <div class="sprint-current-label"><div class="sprint-current-dot"></div> Sprint 1 — Active</div>
+
+    <!-- Card 1 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #1</div>
+        <div class="build-outcome">LP follow-up happens without me thinking about it</div>
+        <div class="build-badges">
+          <span class="badge badge-medium">Medium lift</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">After each LP meeting, follow-up is manual and often doesn't happen. No draft is created, no trigger fires. Sent email shows no follow-up emails in the 48h after LP calls. Momentum dies when the call ends.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">Trigger: Granola transcript posted after an LP call. AI reads transcript → drafts a personalized follow-up email → posts draft in Teams for 1-click approve + send. Done before I close my laptop.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">3–4h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Directly moves LP goal</span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #2</div>
+        <div class="build-outcome">Thesis-fit deals come to me — I stop hunting page by page</div>
+        <div class="build-badges">
+          <span class="badge badge-big">Big build</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">66 LinkedIn visits per day during work hours. Research is happening manually, profile by profile, with no system. PitchBook data doesn't flow back to Notion. I'm doing the same work repeatedly with nothing compounding.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">A weekly sourcing agent runs against my Physical Vertical AI + AINS thesis criteria using PitchBook + LinkedIn data. Surfaces 5–10 pre-screened companies each Monday with a brief + outreach draft pre-populated in Notion. I review — I don't research.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">5–8h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-medium">↑ Moves deal sourcing goal</span>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #3</div>
+        <div class="build-outcome">Scheduling runs on rules — not my attention</div>
+        <div class="build-badges">
+          <span class="badge badge-medium">Medium lift</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">Sent email is full of calendar accept/declines and Calendly link replies. Each scheduling exchange is 2–4 back-and-forth emails that require my attention but no real judgment. Outlook is tracking at 3.8h over 14 days.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">AI monitors inbox for meeting requests and proposes times based on rules I set — LP meetings get priority Tue–Thu 9–11am slots. Calendly links go out automatically for known meeting types. I only touch high-judgment scheduling decisions.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">2–3h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Creates LP meeting capacity</span>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #4</div>
+        <div class="build-outcome">VC catch-ups produce LP leads — not just relationship maintenance</div>
+        <div class="build-badges">
+          <span class="badge badge-medium">Medium lift</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">VC catch-ups with Glasswing, Lightbank, Arthur Ventures happen regularly, but LP referral leads surfaced in conversation go untracked. Good intel (e.g. "search investment office + Kellogg for LP leads") disappears into Granola and is never acted on.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">After each VC call, Granola transcript is parsed for LP referral leads mentioned. AI extracts names + companies → creates a Notion task with a draft intro request. VC meetings become a compounding LP pipeline, not just network maintenance.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">1–2h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Directly moves LP goal</span>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #5</div>
+        <div class="build-outcome">Every company meeting produces a structured deal note — automatically</div>
+        <div class="build-badges">
+          <span class="badge badge-quick">Quick win</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">Deal feedback is being written inline in Teams (Moiz, Plutus) with no structure. Granola links get posted manually to Teams channels. There's no pipeline from transcript → structured memo → Notion Founder CRM entry. Each deal touches me 3–4 times.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">Trigger: Granola meeting ends. Hook reads transcript → extracts company name, ARR, thesis fit, key signals, open questions, next step → posts to Notion CRM + drops summary in Teams thread. Requires confirmation, not writing.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">2–3h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-medium">↑ Improves deal pipeline quality</span>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S1 · #6</div>
+        <div class="build-outcome">My LP and deal progress is always visible — no manual tracking</div>
+        <div class="build-badges">
+          <span class="badge badge-quick">Quick win</span>
+          <span class="badge badge-status">Not started</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What's happening today</div>
+          <div class="build-cell-text">Tracking LP meetings vs. the 3/week goal requires a manual conversation each week. Some LP meetings aren't on Outlook at all. Calendar categorization is ambiguous. There's no live score — just memory and guesswork.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What the automated version looks like</div>
+          <div class="build-cell-text">A Monday-morning summary (Teams or email) shows: LP meetings last week vs. goal, new companies sourced vs. 1/week target, who needs follow-up. Pulls from Outlook + Notion CRM. 30 seconds to read, zero manual work.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">1h</div>
+          <div class="build-hours-label">reclaimed per week</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Keeps LP goal on track</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SECTION 3: MY SYSTEM ── -->
+  <div class="section">
+    <div class="section-title">My System <span class="section-num">§3</span></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Each sprint builds on the last. S1 automations are the foundation.</p>
+    <div class="sprint-grid">
+
+      <div class="sprint-card">
+        <div class="sprint-icon">🌐</div>
+        <div class="sprint-label">Sprint 2</div>
+        <div class="sprint-title">Deployed website + data collection tool</div>
+        <div class="sprint-coming">Coming in Sprint 2</div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-icon">⚙️</div>
+        <div class="sprint-label">Sprint 3</div>
+        <div class="sprint-title">Automated n8n or Claude Routines workflow</div>
+        <div class="sprint-coming">Coming in Sprint 3</div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-icon">🧠</div>
+        <div class="sprint-label">Sprint 4</div>
+        <div class="sprint-title">Knowledge wiki context system</div>
+        <div class="sprint-coming">Coming in Sprint 4</div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-icon">🤖</div>
+        <div class="sprint-label">Sprint 5</div>
+        <div class="sprint-title">Custom agentic workflow</div>
+        <div class="sprint-coming">Coming in Sprint 5</div>
+      </div>
+
+      <div class="sprint-card">
+        <div class="sprint-icon">✅</div>
+        <div class="sprint-label">Sprint 6</div>
+        <div class="sprint-title">Eval system — tested and documented</div>
+        <div class="sprint-coming">Coming in Sprint 6</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-text">AI Builder Automation Portfolio — April 24, 2026 | Built in L2</div>
+    <div class="footer-text"><a href="time-audit.html">Time Audit</a></div>
+  </div>
+
+</div>
+</body>
+</html>

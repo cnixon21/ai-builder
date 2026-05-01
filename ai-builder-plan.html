@@ -98,6 +98,13 @@
   .sprint-current-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--accent); background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.2); border-radius: 6px; padding: 4px 10px; margin-bottom: 16px; }
   .sprint-current-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .sprint-complete-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--green); background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 6px; padding: 4px 10px; margin-bottom: 16px; }
+  .sprint-complete-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  .sprint-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  .live-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .live-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--accent); background: rgba(79,142,247,0.07); border: 1px solid rgba(79,142,247,0.2); border-radius: 6px; padding: 5px 12px; text-decoration: none; }
+  .live-link:hover { background: rgba(79,142,247,0.14); text-decoration: none; }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 </style>
 </head>
 <body>
@@ -108,7 +115,7 @@
     <div class="header-top">
       <div>
         <div class="header-name">Casey Nixon — AI Builder Plan</div>
-        <div class="header-sub">Investor, Mercato Partners · Growth Equity · Sprint 1</div>
+        <div class="header-sub">Investor, Mercato Partners · Growth Equity · Sprint 2</div>
       </div>
       <div class="header-date">
         <div>April 24, 2026</div>
@@ -156,7 +163,7 @@
   <!-- ── SECTION 2: WHAT I'M BUILDING ── -->
   <div class="section">
     <div class="section-title">What I'm Building <span class="section-num">§2</span></div>
-    <div class="sprint-current-label"><div class="sprint-current-dot"></div> Sprint 1 — Active</div>
+    <div class="sprint-complete-label"><div class="sprint-complete-dot"></div> Sprint 1 — Complete</div>
 
     <!-- Card 1 -->
     <div class="build-card">
@@ -332,6 +339,103 @@
       </div>
     </div>
 
+    <hr class="sprint-divider">
+    <div class="sprint-current-label"><div class="sprint-current-dot"></div> Sprint 2 — Active</div>
+
+    <!-- S2 Card 1 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S2 · #1</div>
+        <div class="build-outcome">Live Kanban dashboard — every automation idea tracked in one place</div>
+        <div class="build-badges">
+          <span class="badge badge-quick">Quick win</span>
+          <span class="badge" style="background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);">✓ Shipped</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What was missing</div>
+          <div class="build-cell-text">Automation ideas were scattered — some in Notion, some in chat, some in my head. No single view of what's queued, in flight, or done. Prioritization was invisible and hard to revisit.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What was built</div>
+          <div class="build-cell-text">A dark-mode Kanban board (<code>ai-builder-dashboard.html</code>) with 10 automation cards across four columns: Suggested, To Build, In Progress, Done. Cards show name, description, and priority. Deployed to Vercel.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">10 cards</div>
+          <div class="build-hours-label">tracked across 4 stages</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Makes system visible</span>
+      </div>
+    </div>
+
+    <!-- S2 Card 2 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S2 · #2</div>
+        <div class="build-outcome">Notion as the source of truth — board state persists and syncs live</div>
+        <div class="build-badges">
+          <span class="badge badge-medium">Medium lift</span>
+          <span class="badge" style="background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);">✓ Shipped</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What was missing</div>
+          <div class="build-cell-text">The original board used localStorage — state was browser-local, not shareable, and lost on clear. Moving a card had no lasting effect. The roadmap needed a real backend so it could be updated from anywhere and persist across sessions.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What was built</div>
+          <div class="build-cell-text">An <strong>AI Automation Roadmap</strong> database in Notion wired to a <code>/api/roadmap</code> endpoint (GET + PATCH). Dashboard loads cards from Notion on open; dragging a card to a new column writes the status back instantly. No refresh needed.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">Live sync</div>
+          <div class="build-hours-label">drag → Notion updates in &lt;1s</div>
+        </div>
+        <span class="impact-pill impact-medium">↑ Roadmap becomes a real system</span>
+      </div>
+    </div>
+
+    <!-- S2 Card 3 -->
+    <div class="build-card">
+      <div class="build-card-header">
+        <div class="build-rank">S2 · #3</div>
+        <div class="build-outcome">Automation advisor agent — 60-second briefing on what to build next</div>
+        <div class="build-badges">
+          <span class="badge badge-medium">Medium lift</span>
+          <span class="badge" style="background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);">✓ Shipped</span>
+        </div>
+      </div>
+      <div class="build-detail-grid">
+        <div class="build-cell">
+          <div class="build-cell-label">What was missing</div>
+          <div class="build-cell-text">Even with a visible roadmap, choosing what to build next required manual review. No signal on what's stalled, what's highest leverage, or what should be added. Prioritization was still a judgment call with no data behind it.</div>
+        </div>
+        <div class="build-cell">
+          <div class="build-cell-label">What was built</div>
+          <div class="build-cell-text">An agent that reads the Notion roadmap and Claude Code session history, then outputs a structured briefing: current priorities, stalls, and one new automation to add. Takes 60 seconds to read. No manual analysis required.</div>
+        </div>
+      </div>
+      <div class="build-footer">
+        <div class="build-hours">
+          <div class="build-hours-val">60 sec</div>
+          <div class="build-hours-label">to full roadmap situational awareness</div>
+        </div>
+        <span class="impact-pill impact-high">↑ Closes the build-prioritize loop</span>
+      </div>
+    </div>
+
+    <!-- Live links -->
+    <div class="live-links">
+      <a class="live-link" href="https://ai-builder-theta-six.vercel.app/" target="_blank"><div class="live-dot"></div> Dashboard</a>
+      <a class="live-link" href="https://ai-builder-theta-six.vercel.app/ai-builder-plan.html" target="_blank"><div class="live-dot"></div> Automation Plan</a>
+      <a class="live-link" href="https://ai-builder-theta-six.vercel.app/time-audit.html" target="_blank"><div class="live-dot"></div> Time Audit</a>
+    </div>
+
   </div>
 
   <!-- ── SECTION 3: MY SYSTEM ── -->
@@ -340,11 +444,11 @@
     <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Each sprint builds on the last. S1 automations are the foundation.</p>
     <div class="sprint-grid">
 
-      <div class="sprint-card">
+      <div class="sprint-card" style="opacity:1;border-color:rgba(52,211,153,0.35);background:rgba(52,211,153,0.04);">
         <div class="sprint-icon">🌐</div>
-        <div class="sprint-label">Sprint 2</div>
-        <div class="sprint-title">Deployed website + data collection tool</div>
-        <div class="sprint-coming">Coming in Sprint 2</div>
+        <div class="sprint-label" style="color:var(--green);">Sprint 2 — Done</div>
+        <div class="sprint-title" style="color:var(--text);">Kanban dashboard + Notion backend + advisor agent</div>
+        <div class="sprint-coming" style="color:var(--green);font-style:normal;">✓ Live at vercel.app</div>
       </div>
 
       <div class="sprint-card">
@@ -380,8 +484,8 @@
 
   <!-- ── FOOTER ── -->
   <div class="footer">
-    <div class="footer-text">AI Builder Automation Portfolio — April 24, 2026 | Built in L2</div>
-    <div class="footer-text"><a href="time-audit.html">Time Audit</a></div>
+    <div class="footer-text">AI Builder Automation Portfolio — April 30, 2026 | Built in L2</div>
+    <div class="footer-text" style="display:flex;gap:16px;"><a href="time-audit.html">Time Audit</a><a href="ai-builder-dashboard.html">Dashboard</a></div>
   </div>
 
 </div>

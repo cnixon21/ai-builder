@@ -4,774 +4,981 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Builder Plan — Casey Nixon</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --color-lumen:       #FFFFEB;
-    --color-lumen-dark:  #E4E4D0;
-    --color-vast:        #1A1A1A;
-    --color-fathom:      #034F46;
-    --color-dawn:        #F0D7FF;
-    --color-glow:        #FFA946;
-    --color-pulse:       #7F1C34;
-    --color-neutral:     #666666;
-    --color-neutral-lt:  #AAAAAA;
-    --color-neutral-dk:  #444444;
-    --color-success:     #CEF5CA;
-    --color-success-dk:  #114E0B;
-    --color-warning:     #FCF8D8;
-    --color-warning-dk:  #5E5515;
-    --color-error:       #F8E4E4;
-    --font-display: "EB Garamond", Georgia, serif;
-    --font-body:    Figtree, -apple-system, Arial, sans-serif;
-    --radius-section: 64px;
-    --radius-card:    2.5rem;
-    --radius-btn:     12px;
-  }
+:root {
+  --bg:       #F2EFEA;
+  --ink:      #241F21;
+  --surface:  #FFFFFF;
+  --stone:    #EBE7DF;
+  --greige:   #D2CDC4;
+  --mid:      #C3BCBB;
+  --drift:    #988F8B;
+  --divider:  #D6D6D6;
+  --orange:   #F76C46;
+  --sage:     #BACFA3;
+  --amber:    #FCB131;
+  --sky:      #85A1C5;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--color-lumen);
-    color: var(--color-vast);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.65;
-  }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
 
-  a { color: var(--color-fathom); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+a { color: inherit; text-decoration: none; }
+a:hover { opacity: 0.65; }
 
-  .page { max-width: 1060px; margin: 0 auto; padding: 56px 32px 96px; }
+/* ── HERO ─────────────────────────────── */
+.hero {
+  position: relative;
+  height: 82vh;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-  /* ── Header ── */
-  .header { padding-bottom: 48px; margin-bottom: 56px; border-bottom: 1px solid var(--color-lumen-dark); }
-  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
-  .header-name {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 400;
-    letter-spacing: -0.06rem;
-    line-height: 1.05;
-    color: var(--color-vast);
-  }
-  .header-sub { font-size: 0.875rem; color: var(--color-neutral); margin-top: 6px; }
-  .header-date { font-size: 0.875rem; color: var(--color-neutral); text-align: right; }
-  .header-date span { display: block; color: var(--color-neutral-lt); margin-top: 3px; font-size: 0.8rem; }
-  .header-goal {
-    margin-top: 24px;
-    background: var(--color-dawn);
-    border-radius: var(--radius-btn);
-    padding: 14px 22px;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 4px;
-    max-width: 560px;
-  }
-  .header-goal .label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--color-vast); font-weight: 600; opacity: 0.55; }
-  .header-goal .value { font-size: 1rem; font-weight: 600; color: var(--color-vast); }
+.hero-nav {
+  position: absolute;
+  top: 2rem; left: 2.5rem; right: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 20;
+  font-size: 13px;
+}
+.hero-wordmark {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-right: auto;
+}
+.hero-nav a { color: var(--ink); opacity: 0.4; transition: opacity 0.2s; }
+.hero-nav a:hover { opacity: 1; }
 
-  /* ── Section ── */
-  .section { margin-bottom: 48px; }
+.hero-headline {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(3rem, 6.5vw, 5.75rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  max-width: 13ch;
+  color: var(--ink);
+}
+.hero-sub {
+  margin-top: 1.25rem;
+  font-size: 12px;
+  color: var(--drift);
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 5;
+}
 
-  /* Dark section (alternating rhythm) */
-  .section-dark {
-    background: var(--color-vast);
-    border-radius: var(--radius-section);
-    padding: 56px;
-    margin-bottom: 48px;
-    color: var(--color-lumen);
-  }
-  @media (max-width: 640px) { .section-dark { padding: 36px 24px; border-radius: 2.5rem; } }
+/* Floating field */
+.hero-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fobj {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fobj.in { opacity: 1; transform: scale(1); }
 
-  .section-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.6rem, 3vw, 2.25rem);
-    font-weight: 400;
-    letter-spacing: -0.04rem;
-    margin-bottom: 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    line-height: 1.1;
-    color: inherit;
-  }
-  .section-num {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 500;
-    background: rgba(255,255,255,0.1);
-    color: var(--color-neutral-lt);
-    padding: 3px 10px;
-    border-radius: 10px;
-  }
-  .section:not(.section-dark) .section-num {
-    background: rgba(0,0,0,0.06);
-    color: var(--color-neutral);
-  }
+@keyframes da { 0%,100%{ translate:0 0 } 50%{ translate:0 9px } }
+@keyframes db { 0%,100%{ translate:0 0 } 50%{ translate:0 -7px } }
+@keyframes dc { 0%,100%{ translate:0 0 } 50%{ translate:4px 7px } }
+@keyframes dd { 0%,100%{ translate:0 0 } 50%{ translate:-5px 8px } }
 
-  /* ── Insight cards (§1 — dark section) ── */
-  .insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 720px) { .insight-grid { grid-template-columns: 1fr; } }
+.fobj.in.da { animation: da 6.5s ease-in-out infinite; }
+.fobj.in.db { animation: db 5.8s ease-in-out infinite; }
+.fobj.in.dc { animation: dc 7.3s ease-in-out infinite; }
+.fobj.in.dd { animation: dd 8.2s ease-in-out infinite; }
 
-  .insight-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,235,0.1);
-    border-radius: var(--radius-card);
-    padding: 28px 24px;
-  }
-  .insight-num {
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: rgba(255,255,235,0.35);
-    margin-bottom: 14px;
-  }
-  .insight-stat {
-    font-family: var(--font-display);
-    font-size: 3.25rem;
-    font-weight: 400;
-    letter-spacing: -0.08rem;
-    line-height: 1;
-    margin-bottom: 10px;
-  }
-  .insight-card.red   .insight-stat { color: var(--color-dawn); }
-  .insight-card.yellow .insight-stat { color: var(--color-glow); }
-  .insight-card.blue  .insight-stat { color: var(--color-dawn); opacity: 0.7; }
+@media (prefers-reduced-motion: reduce) {
+  .fobj { transition: opacity 0.3s; }
+  .fobj.in.da,.fobj.in.db,.fobj.in.dc,.fobj.in.dd { animation: none; }
+}
 
-  .insight-headline {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--color-lumen);
-    margin-bottom: 10px;
-    line-height: 1.3;
-  }
-  .insight-body {
-    font-size: 0.8rem;
-    color: rgba(255,255,235,0.55);
-    line-height: 1.65;
-  }
-  .audit-link {
-    margin-top: 20px;
-    text-align: right;
-    font-size: 0.875rem;
-  }
-  .audit-link a { color: var(--color-dawn); }
-  .audit-link a:hover { color: #e8c8ff; }
+/* ── PAGE ─────────────────────────────── */
+.page { max-width: 1080px; margin: 0 auto; padding: 0 2rem 96px; }
 
-  /* ── Build cards (§2 — cream section) ── */
-  .build-card {
-    background: #FEFEF5;
-    border: 1px solid var(--color-lumen-dark);
-    border-radius: var(--radius-card);
-    padding: 28px 28px 24px;
-    margin-bottom: 16px;
-  }
-  .build-card-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-  }
-  .build-rank {
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: var(--color-neutral);
-    background: var(--color-lumen-dark);
-    border-radius: 8px;
-    padding: 4px 10px;
-    flex-shrink: 0;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    margin-top: 4px;
-  }
-  .build-outcome {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 400;
-    letter-spacing: -0.02rem;
-    flex: 1;
-    line-height: 1.25;
-    color: var(--color-vast);
-    min-width: 0;
-  }
-  .build-badges { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; flex-shrink: 0; margin-top: 2px; }
-  .badge {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 4px 11px;
-    border-radius: 8px;
-    white-space: nowrap;
-  }
-  .badge-quick   { background: var(--color-success); color: var(--color-success-dk); }
-  .badge-medium  { background: var(--color-warning); color: var(--color-warning-dk); }
-  .badge-big     { background: var(--color-error);   color: var(--color-pulse); }
-  .badge-status  { background: var(--color-lumen-dark); color: var(--color-neutral-dk); }
-  .badge-shipped { background: rgba(3,79,70,0.1); color: var(--color-fathom); }
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--drift);
+  border: 1px solid var(--greige);
+  border-radius: 8px;
+  padding: 5px 14px;
+  margin-bottom: 52px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.backlink:hover { color: var(--ink); border-color: var(--mid); opacity: 1; }
 
-  .build-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 640px) { .build-detail-grid { grid-template-columns: 1fr; } }
+/* Page header */
+.page-header {
+  padding-bottom: 52px;
+  margin-bottom: 64px;
+  border-bottom: 1px solid var(--divider);
+}
+.page-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 6px;
+}
+.page-meta { font-size: 13px; color: var(--drift); }
+.page-goal {
+  margin-top: 28px;
+  padding: 16px 22px;
+  background: var(--stone);
+  border-radius: 12px;
+  display: inline-block;
+  max-width: 560px;
+}
+.goal-label {
+  font-size: 9.5px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--drift);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+.goal-value { font-size: 14px; color: var(--ink); }
 
-  .build-cell {
-    background: var(--color-lumen);
-    border: 1px solid var(--color-lumen-dark);
-    border-radius: 1.25rem;
-    padding: 18px 20px;
-  }
-  .build-cell-label {
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--color-neutral);
-    font-weight: 600;
-    margin-bottom: 7px;
-  }
-  .build-cell-text { font-size: 0.85rem; color: var(--color-vast); line-height: 1.6; }
-  .build-cell-text code {
-    font-size: 0.75rem;
-    background: var(--color-lumen-dark);
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-family: monospace;
-  }
-  .build-cell-text strong { font-weight: 600; }
+/* Eyebrow + heading */
+.eyebrow {
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--drift);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+.section-heading {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 32px;
+  color: inherit;
+}
 
-  .build-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 18px;
-    padding-top: 18px;
-    border-top: 1px solid var(--color-lumen-dark);
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .build-hours { display: flex; align-items: baseline; gap: 8px; }
-  .build-hours-val {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 400;
-    color: var(--color-fathom);
-    letter-spacing: -0.04rem;
-    line-height: 1;
-  }
-  .build-hours-label { font-size: 0.8rem; color: var(--color-neutral); }
+/* ── DARK SECTION ─────────────────────── */
+.dark-section {
+  background: var(--ink);
+  border-radius: 52px;
+  padding: 60px;
+  margin-bottom: 64px;
+  color: var(--bg);
+}
+@media (max-width: 640px) { .dark-section { padding: 36px 24px; border-radius: 2rem; } }
+.dark-section .eyebrow { color: rgba(242,239,234,0.3); }
+.dark-section .section-heading { color: var(--bg); }
+.section-desc { font-size: 13px; color: rgba(242,239,234,0.4); margin-top: -16px; margin-bottom: 28px; }
 
-  .impact-pill {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 5px 13px;
-    border-radius: 8px;
-  }
-  .impact-high   { background: var(--color-dawn); color: var(--color-vast); }
-  .impact-medium { background: var(--color-lumen-dark); color: var(--color-neutral-dk); }
+/* ── FINDING CARDS ────────────────────── */
+.finding-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+@media (max-width: 720px) { .finding-grid { grid-template-columns: 1fr; } }
 
-  /* ── Sprint divider & labels ── */
-  .sprint-divider { border: none; border-top: 1px solid var(--color-lumen-dark); margin: 44px 0; }
+.finding-card {
+  background: rgba(242,239,234,0.05);
+  border: 1px solid rgba(242,239,234,0.09);
+  border-radius: 1.75rem;
+  padding: 28px 24px;
+}
+.finding-n {
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(242,239,234,0.28);
+  margin-bottom: 16px;
+}
+.finding-stat {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 3.5rem;
+  font-weight: 300;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.stat-orange { color: var(--orange); }
+.stat-amber  { color: var(--amber); }
+.stat-sky    { color: var(--sky); }
+.finding-headline {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--bg);
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+.finding-body {
+  font-size: 12.5px;
+  color: rgba(242,239,234,0.42);
+  line-height: 1.7;
+}
+.audit-link { margin-top: 28px; text-align: right; font-size: 13px; }
+.audit-link a { color: rgba(242,239,234,0.4); transition: color 0.15s; }
+.audit-link a:hover { color: var(--bg); opacity: 1; }
 
-  .sprint-complete-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-fathom);
-    background: rgba(3,79,70,0.08);
-    border: 1px solid rgba(3,79,70,0.2);
-    border-radius: var(--radius-btn);
-    padding: 5px 13px;
-    margin-bottom: 20px;
-  }
-  .sprint-complete-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-fathom); flex-shrink: 0; }
+/* ── BUILD SECTION ────────────────────── */
+.build-section { margin-bottom: 64px; }
 
-  .sprint-current-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-vast);
-    background: var(--color-dawn);
-    border: 1px solid rgba(240,215,255,0.6);
-    border-radius: var(--radius-btn);
-    padding: 5px 13px;
-    margin-bottom: 20px;
-  }
-  .sprint-current-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-vast);
-    flex-shrink: 0;
-    animation: pulse 1.8s infinite;
-  }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+.sprint-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 5px 14px;
+  margin-bottom: 22px;
+}
+.sprint-done {
+  background: rgba(186,207,163,0.18);
+  color: #4a7a3d;
+  border: 1px solid rgba(186,207,163,0.45);
+}
+.sprint-active {
+  background: rgba(247,108,70,0.08);
+  color: var(--orange);
+  border: 1px solid rgba(247,108,70,0.22);
+}
+.sprint-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.sprint-done .sprint-dot { background: #4a7a3d; }
+.sprint-active .sprint-dot {
+  background: var(--orange);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:0.2 } }
 
-  /* ── Live links ── */
-  .live-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
-  .live-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--color-vast);
-    background: var(--color-dawn);
-    border-radius: var(--radius-btn);
-    padding: 7px 16px;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .live-link:hover { background: #e8c8ff; text-decoration: none; }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-fathom); flex-shrink: 0; }
+.build-card {
+  background: var(--stone);
+  border: 1px solid var(--greige);
+  border-radius: 1.75rem;
+  padding: 28px;
+  margin-bottom: 12px;
+}
+.build-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.build-id {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--drift);
+  background: var(--greige);
+  border-radius: 6px;
+  padding: 4px 10px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+.build-outcome {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+  color: var(--ink);
+}
+.badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; flex-shrink: 0; }
+.badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.badge-quick  { background: rgba(186,207,163,0.28); color: #3a6b30; }
+.badge-medium { background: var(--bg); color: var(--drift); border: 1px solid var(--greige); }
+.badge-big    { background: rgba(247,108,70,0.1); color: var(--orange); }
+.badge-done   { background: rgba(186,207,163,0.25); color: #3a6b30; }
+.badge-not    { background: var(--greige); color: var(--drift); }
 
-  /* ── Sprint roadmap grid (§3 — dark section) ── */
-  .section-desc {
-    font-size: 0.875rem;
-    color: rgba(255,255,235,0.45);
-    margin-bottom: 24px;
-    margin-top: -12px;
-  }
+.build-cells { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 640px) { .build-cells { grid-template-columns: 1fr; } }
+.build-cell {
+  background: var(--bg);
+  border: 1px solid var(--greige);
+  border-radius: 1rem;
+  padding: 18px;
+}
+.cell-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--drift);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.cell-text { font-size: 13px; color: var(--ink); line-height: 1.65; }
+.cell-text code {
+  font-size: 11.5px;
+  background: var(--stone);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: ui-monospace, "SF Mono", monospace;
+}
+.cell-text strong { font-weight: 600; }
 
-  .sprint-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-  @media (max-width: 900px) { .sprint-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 560px) { .sprint-grid { grid-template-columns: 1fr 1fr; } }
+.build-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--greige);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hours {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+}
+.hours-label { font-size: 12px; color: var(--drift); margin-left: 6px; }
 
-  .sprint-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,235,0.08);
-    border-radius: 1.5rem;
-    padding: 20px 16px;
-    opacity: 0.4;
-    transition: opacity 0.15s;
-  }
-  .sprint-card.done {
-    opacity: 1;
-    border-color: rgba(3,79,70,0.5);
-    background: rgba(3,79,70,0.12);
-  }
-  .sprint-icon { font-size: 1.4rem; margin-bottom: 10px; }
-  .sprint-label {
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255,255,235,0.35);
-    margin-bottom: 8px;
-  }
-  .sprint-card.done .sprint-label { color: #6EE7B7; }
-  .sprint-title {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 400;
-    color: rgba(255,255,235,0.55);
-    line-height: 1.3;
-    margin-bottom: 12px;
-  }
-  .sprint-card.done .sprint-title { color: var(--color-lumen); }
-  .sprint-coming { font-size: 0.7rem; color: rgba(255,255,235,0.25); font-style: italic; }
-  .sprint-card.done .sprint-coming { color: #6EE7B7; font-style: normal; }
+.impact-pill {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 13px;
+  border-radius: 8px;
+}
+.impact-high   { background: rgba(247,108,70,0.1); color: var(--orange); }
+.impact-medium { background: var(--greige); color: var(--drift); }
 
-  /* ── Footer ── */
-  .footer {
-    border-top: 1px solid var(--color-lumen-dark);
-    padding-top: 24px;
-    margin-top: 64px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .footer-text { font-size: 0.8rem; color: var(--color-neutral); }
-  .footer-links { display: flex; gap: 20px; }
-  .footer-links a { font-size: 0.8rem; color: var(--color-fathom); }
+.sprint-divider { border: none; border-top: 1px solid var(--greige); margin: 44px 0; }
+
+/* Live links */
+.live-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+.live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--stone);
+  border: 1px solid var(--greige);
+  border-radius: 8px;
+  padding: 7px 16px;
+  transition: background 0.15s;
+}
+.live-link:hover { background: var(--greige); opacity: 1; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+
+/* ── SPRINT ROADMAP ───────────────────── */
+.sprint-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+@media (max-width: 900px) { .sprint-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 560px) { .sprint-grid { grid-template-columns: 1fr 1fr; } }
+
+.sprint-card {
+  background: rgba(242,239,234,0.04);
+  border: 1px solid rgba(242,239,234,0.07);
+  border-radius: 1.5rem;
+  padding: 22px 18px;
+  opacity: 0.32;
+}
+.sprint-card.done {
+  opacity: 1;
+  border-color: rgba(186,207,163,0.38);
+  background: rgba(186,207,163,0.09);
+}
+.sprint-icon { font-size: 1.25rem; margin-bottom: 12px; }
+.sprint-n {
+  font-size: 9.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(242,239,234,0.28);
+  margin-bottom: 8px;
+}
+.sprint-card.done .sprint-n { color: var(--sage); }
+.sprint-title {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: rgba(242,239,234,0.38);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.sprint-card.done .sprint-title { color: var(--bg); }
+.sprint-note { font-size: 11px; color: rgba(242,239,234,0.18); font-style: italic; }
+.sprint-card.done .sprint-note { color: var(--sage); font-style: normal; }
+
+/* ── FOOTER ───────────────────────────── */
+.footer {
+  border-top: 1px solid var(--divider);
+  padding-top: 24px;
+  margin-top: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-text { font-size: 12px; color: var(--drift); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 12px; color: var(--drift); transition: color 0.15s; }
+.footer-links a:hover { color: var(--ink); opacity: 1; }
 </style>
 </head>
 <body>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<section class="hero">
+  <nav class="hero-nav">
+    <span class="hero-wordmark">Casey Nixon</span>
+    <a href="ai-builder-dashboard.html">Dashboard</a>
+    <a href="time-audit.html">Time Audit</a>
+  </nav>
+
+  <div class="hero-field" id="heroField">
+
+    <!-- Workflow — left edge, mid-high -->
+    <div class="fobj da" style="left:7%;top:17%;width:88px;opacity:0.22;z-index:2;" data-delay="0">
+      <svg width="88" height="56" viewBox="0 0 88 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="16" width="22" height="22" rx="4"/>
+        <rect x="33" y="16" width="22" height="22" rx="4"/>
+        <rect x="65" y="16" width="22" height="22" rx="4"/>
+        <line x1="23" y1="27" x2="33" y2="27"/>
+        <line x1="55" y1="27" x2="65" y2="27"/>
+        <polyline points="29,23 33,27 29,31"/>
+        <polyline points="61,23 65,27 61,31"/>
+      </svg>
+    </div>
+
+    <!-- Envelope — left, lower -->
+    <div class="fobj dc" style="left:13%;top:63%;width:76px;opacity:0.42;z-index:3;" data-delay="900">
+      <svg width="76" height="56" viewBox="0 0 76 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="8" width="72" height="44" rx="5"/>
+        <polyline points="2,8 38,36 74,8"/>
+      </svg>
+    </div>
+
+    <!-- Calendar — far left, low -->
+    <div class="fobj db" style="left:3%;top:75%;width:64px;opacity:0.18;z-index:2;" data-delay="1600">
+      <svg width="64" height="70" viewBox="0 0 64 70" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="9" width="58" height="58" rx="6"/>
+        <line x1="3" y1="26" x2="61" y2="26"/>
+        <line x1="18" y1="3" x2="18" y2="16"/>
+        <line x1="46" y1="3" x2="46" y2="16"/>
+        <circle cx="18" cy="40" r="2.2" fill="currentColor" stroke="none"/>
+        <circle cx="32" cy="40" r="2.2" fill="currentColor" stroke="none"/>
+        <circle cx="46" cy="40" r="2.2" fill="currentColor" stroke="none"/>
+        <circle cx="18" cy="54" r="2.2" fill="currentColor" stroke="none"/>
+        <circle cx="32" cy="54" r="2.2" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+
+    <!-- Document — left, near top -->
+    <div class="fobj da" style="left:20%;top:7%;width:58px;opacity:0.58;z-index:4;" data-delay="400">
+      <svg width="58" height="76" viewBox="0 0 58 76" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 3h30l16 16v54H6z"/>
+        <polyline points="36,3 36,19 52,19"/>
+        <line x1="13" y1="30" x2="45" y2="30"/>
+        <line x1="13" y1="40" x2="45" y2="40"/>
+        <line x1="13" y1="50" x2="45" y2="50"/>
+        <line x1="13" y1="60" x2="32" y2="60"/>
+      </svg>
+    </div>
+
+    <!-- Neural network — left, bottom -->
+    <div class="fobj dd" style="left:23%;top:78%;width:86px;opacity:0.32;z-index:3;" data-delay="1200">
+      <svg width="86" height="68" viewBox="0 0 86 68" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+        <circle cx="12" cy="16" r="5"/><circle cx="12" cy="34" r="5"/><circle cx="12" cy="52" r="5"/>
+        <circle cx="43" cy="10" r="5"/><circle cx="43" cy="34" r="5"/><circle cx="43" cy="58" r="5"/>
+        <circle cx="74" cy="24" r="5"/><circle cx="74" cy="46" r="5"/>
+        <line x1="17" y1="16" x2="38" y2="10"/><line x1="17" y1="34" x2="38" y2="34"/><line x1="17" y1="52" x2="38" y2="58"/>
+        <line x1="17" y1="16" x2="38" y2="34"/><line x1="17" y1="34" x2="38" y2="10"/><line x1="17" y1="34" x2="38" y2="58"/>
+        <line x1="48" y1="10" x2="69" y2="24"/><line x1="48" y1="34" x2="69" y2="24"/><line x1="48" y1="34" x2="69" y2="46"/><line x1="48" y1="58" x2="69" y2="46"/>
+      </svg>
+    </div>
+
+    <!-- Clock — right side, near top -->
+    <div class="fobj db" style="left:72%;top:13%;width:64px;opacity:0.48;z-index:3;" data-delay="700">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="32" cy="32" r="27"/>
+        <line x1="32" y1="32" x2="32" y2="13"/>
+        <line x1="32" y1="32" x2="44" y2="41"/>
+        <circle cx="32" cy="32" r="2.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+
+    <!-- Kanban — right, lower -->
+    <div class="fobj dc" style="left:78%;top:60%;width:104px;opacity:0.32;z-index:3;" data-delay="1800">
+      <svg width="104" height="72" viewBox="0 0 104 72" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="100" height="68" rx="6"/>
+        <line x1="36" y1="2" x2="36" y2="70"/>
+        <line x1="68" y1="2" x2="68" y2="70"/>
+        <rect x="6" y="10" width="26" height="12" rx="3"/>
+        <rect x="6" y="26" width="26" height="12" rx="3"/>
+        <rect x="40" y="10" width="24" height="12" rx="3"/>
+        <rect x="72" y="10" width="24" height="12" rx="3"/>
+        <rect x="72" y="26" width="24" height="12" rx="3"/>
+      </svg>
+    </div>
+
+    <!-- Bar chart — right edge, low -->
+    <div class="fobj da" style="left:85%;top:77%;width:72px;opacity:0.22;z-index:2;" data-delay="1000">
+      <svg width="72" height="62" viewBox="0 0 72 62" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="6" y1="54" x2="66" y2="54"/>
+        <rect x="10" y="30" width="12" height="24" rx="2"/>
+        <rect x="30" y="16" width="12" height="38" rx="2"/>
+        <rect x="50" y="6" width="12" height="48" rx="2"/>
+      </svg>
+    </div>
+
+    <!-- Code brackets — right, mid -->
+    <div class="fobj dd" style="left:87%;top:33%;width:72px;opacity:0.42;z-index:3;" data-delay="300">
+      <svg width="72" height="52" viewBox="0 0 72 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22,6 6,26 22,46"/>
+        <polyline points="50,6 66,26 50,46"/>
+        <line x1="35" y1="4" x2="37" y2="48"/>
+      </svg>
+    </div>
+
+    <!-- Database — right, very bottom -->
+    <div class="fobj db" style="left:76%;top:84%;width:56px;opacity:0.20;z-index:2;" data-delay="1500">
+      <svg width="56" height="72" viewBox="0 0 56 72" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="28" cy="13" rx="22" ry="7"/>
+        <ellipse cx="28" cy="59" rx="22" ry="7"/>
+        <line x1="6" y1="13" x2="6" y2="59"/>
+        <line x1="50" y1="13" x2="50" y2="59"/>
+        <ellipse cx="28" cy="36" rx="22" ry="7"/>
+      </svg>
+    </div>
+
+    <!-- Gear — foreground, overlaps headline bottom-left -->
+    <div class="fobj dc" style="left:33%;top:74%;width:88px;opacity:0.68;z-index:6;" data-delay="600">
+      <svg width="88" height="88" viewBox="0 0 88 88" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="44" cy="44" r="14"/>
+        <path d="M44 10v10M44 68v10M10 44h10M68 44h10M18.7 18.7l7 7M62.3 62.3l7 7M69.3 18.7l-7 7M25.7 62.3l-7 7"/>
+        <circle cx="44" cy="44" r="24" stroke-opacity="0.2" stroke-dasharray="3 3"/>
+      </svg>
+    </div>
+
+    <!-- Lightbulb — near top center-right, foreground -->
+    <div class="fobj da" style="left:61%;top:5%;width:62px;opacity:0.55;z-index:4;" data-delay="1300">
+      <svg width="52" height="72" viewBox="0 0 52 72" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 28C9 15 43 15 43 28C43 37 34 44 34 52H18C18 44 9 37 9 28Z"/>
+        <line x1="18" y1="56" x2="34" y2="56"/>
+        <line x1="20" y1="62" x2="32" y2="62"/>
+        <line x1="23" y1="68" x2="29" y2="68"/>
+      </svg>
+    </div>
+
+    <!-- Curved flow arrow — foreground, near headline bottom center -->
+    <div class="fobj dd" style="left:44%;top:78%;width:78px;opacity:0.60;z-index:5;" data-delay="800">
+      <svg width="78" height="60" viewBox="0 0 78 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 40 C6 20 72 20 72 40"/>
+        <polyline points="58,32 72,40 60,50"/>
+        <circle cx="6" cy="40" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+
+    <!-- Envelope #2 — foreground, overlaps headline bottom-right -->
+    <div class="fobj db" style="left:55%;top:68%;width:66px;opacity:0.72;z-index:7;" data-delay="500">
+      <svg width="66" height="50" viewBox="0 0 66 50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="62" height="42" rx="5"/>
+        <polyline points="2,4 33,30 64,4"/>
+        <line x1="2" y1="46" x2="20" y2="28"/>
+        <line x1="64" y1="46" x2="46" y2="28"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <h1 class="hero-headline">Automated,<br>systematically.</h1>
+  <p class="hero-sub">AI Builder Plan · Sprint 2 · April 30, 2026</p>
+</section>
+
+<!-- ── BODY ────────────────────────────────────────────── -->
 <div class="page">
 
-  <!-- ── HEADER ── -->
-  <div class="header">
-    <div style="margin-bottom:16px;">
-      <a href="ai-builder-dashboard.html" style="display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:600;color:var(--color-neutral);text-decoration:none;border:1px solid var(--color-lumen-dark);border-radius:var(--radius-btn);padding:5px 14px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='var(--color-fathom)';this.style.borderColor='var(--color-fathom)'" onmouseout="this.style.color='var(--color-neutral)';this.style.borderColor='var(--color-lumen-dark)'">← Automation Dashboard</a>
-    </div>
-    <div class="header-top">
+  <a href="ai-builder-dashboard.html" class="backlink">← Automation Dashboard</a>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
       <div>
-        <div class="header-name">Casey Nixon — AI Builder Plan</div>
-        <div class="header-sub">Investor, Mercato Partners · Growth Equity · Sprint 2</div>
+        <div class="page-title">Casey Nixon — AI Builder Plan</div>
+        <div class="page-meta">Investor, Mercato Partners · Growth Equity · Sprint 2</div>
       </div>
-      <div class="header-date">
-        <div>April 30, 2026</div>
-        <span>AI Builder · L2</span>
+      <div style="text-align:right;">
+        <div style="font-size:13px;color:var(--drift);">April 30, 2026</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:3px;">AI Builder · L2</div>
       </div>
     </div>
-    <div class="header-goal">
-      <div class="label">#1 Goal This Quarter</div>
-      <div class="value">LP Fundraising — 3 LP meetings per week, consistently</div>
-    </div>
-  </div>
-
-  <!-- ── SECTION 1: TIME SUMMARY (dark) ── -->
-  <div class="section section-dark">
-    <div class="section-title">What I Learned From My Time Audit <span class="section-num">§1</span></div>
-    <div class="insight-grid">
-
-      <div class="insight-card red">
-        <div class="insight-num">Finding 01</div>
-        <div class="insight-stat">169</div>
-        <div class="insight-headline">Context switches per day — with 326 on my worst day</div>
-        <div class="insight-body">My lightest meeting day had the highest app-switching rate. Free time isn't becoming deep work — it's becoming noise. No focused LP outreach is happening in those gaps.</div>
-      </div>
-
-      <div class="insight-card yellow">
-        <div class="insight-num">Finding 02</div>
-        <div class="insight-stat">66×</div>
-        <div class="insight-headline">LinkedIn visits per day — manual research, no system</div>
-        <div class="insight-body">LinkedIn is my #1 browser activity at 25% of all work-hour visits. I'm researching founders and companies page by page. PitchBook gets 147 visits; my Affinity CRM gets 22 — meaning none of it flows back to my system.</div>
-      </div>
-
-      <div class="insight-card blue">
-        <div class="insight-num">Finding 03</div>
-        <div class="insight-stat">1 / 3</div>
-        <div class="insight-headline">LP meetings this week vs. 3-per-week goal</div>
-        <div class="insight-body">LP meetings cluster unpredictably instead of running at a steady cadence. Follow-up emails after LP calls aren't visible in sent mail — momentum dies when the call ends. The bottleneck isn't meetings, it's what happens after.</div>
-      </div>
-
-    </div>
-    <div class="audit-link">
-      <a href="time-audit.html">Full Time Audit →</a>
+    <div class="page-goal">
+      <div class="goal-label">#1 Goal This Quarter</div>
+      <div class="goal-value">LP Fundraising — 3 LP meetings per week, consistently</div>
     </div>
   </div>
 
-  <!-- ── SECTION 2: WHAT I'M BUILDING (cream) ── -->
-  <div class="section">
-    <div class="section-title">What I'm Building <span class="section-num" style="background:rgba(0,0,0,0.06);color:var(--color-neutral);">§2</span></div>
-    <div class="sprint-complete-label"><div class="sprint-complete-dot"></div> Sprint 1 — Complete</div>
+  <!-- §01 — TIME AUDIT FINDINGS (dark) -->
+  <div class="dark-section">
+    <div class="eyebrow">§ 01</div>
+    <div class="section-heading">What I learned from my time audit</div>
+    <div class="finding-grid">
 
-    <!-- Card 1 -->
+      <div class="finding-card">
+        <div class="finding-n">Finding 01</div>
+        <div class="finding-stat stat-orange">169</div>
+        <div class="finding-headline">Context switches per day — with 326 on my worst day</div>
+        <div class="finding-body">My lightest meeting day had the highest app-switching rate. Free time isn't becoming deep work — it's becoming noise. No focused LP outreach is happening in those gaps.</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-n">Finding 02</div>
+        <div class="finding-stat stat-amber">66×</div>
+        <div class="finding-headline">LinkedIn visits per day — manual research, no system</div>
+        <div class="finding-body">LinkedIn is my #1 browser activity at 25% of all work-hour visits. I'm researching founders and companies page by page. PitchBook gets 147 visits; my Affinity CRM gets 22 — meaning none of it flows back to my system.</div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-n">Finding 03</div>
+        <div class="finding-stat stat-sky">1 / 3</div>
+        <div class="finding-headline">LP meetings this week vs. 3-per-week goal</div>
+        <div class="finding-body">LP meetings cluster unpredictably instead of running at a steady cadence. Follow-up emails after LP calls aren't visible in sent mail — momentum dies when the call ends. The bottleneck isn't meetings, it's what happens after.</div>
+      </div>
+
+    </div>
+    <div class="audit-link"><a href="time-audit.html">Full time audit →</a></div>
+  </div>
+
+  <!-- §02 — WHAT I'M BUILDING -->
+  <div class="build-section">
+    <div class="eyebrow">§ 02</div>
+    <div class="section-heading">What I'm building</div>
+
+    <div class="sprint-label sprint-done"><div class="sprint-dot"></div> Sprint 1 — Complete</div>
+
+    <!-- S1 · #1 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #1</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #1</div>
         <div class="build-outcome">LP follow-up happens without me thinking about it</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-medium">Medium lift</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">After each LP meeting, follow-up is manual and often doesn't happen. No draft is created, no trigger fires. Sent email shows no follow-up emails in the 48h after LP calls. Momentum dies when the call ends.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">After each LP meeting, follow-up is manual and often doesn't happen. No draft is created, no trigger fires. Sent email shows no follow-up emails in the 48h after LP calls. Momentum dies when the call ends.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">Trigger: Granola transcript posted after an LP call. AI reads transcript → drafts a personalized follow-up email → posts draft in Teams for 1-click approve + send. Done before I close my laptop.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">Trigger: Granola transcript posted after an LP call. AI reads transcript → drafts a personalized follow-up email → posts draft in Teams for 1-click approve + send. Done before I close my laptop.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">3–4h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">3–4h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-high">↑ Directly moves LP goal</span>
       </div>
     </div>
 
-    <!-- Card 2 -->
+    <!-- S1 · #2 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #2</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #2</div>
         <div class="build-outcome">Thesis-fit deals come to me — I stop hunting page by page</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-big">Big build</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">66 LinkedIn visits per day during work hours. Research is happening manually, profile by profile, with no system. PitchBook data doesn't flow back to Notion. I'm doing the same work repeatedly with nothing compounding.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">66 LinkedIn visits per day during work hours. Research is happening manually, profile by profile, with no system. PitchBook data doesn't flow back to Notion. I'm doing the same work repeatedly with nothing compounding.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">A weekly sourcing agent runs against my Physical Vertical AI + AINS thesis criteria using PitchBook + LinkedIn data. Surfaces 5–10 pre-screened companies each Monday with a brief + outreach draft pre-populated in Notion. I review — I don't research.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">A weekly sourcing agent runs against my Physical Vertical AI + AINS thesis criteria using PitchBook + LinkedIn data. Surfaces 5–10 pre-screened companies each Monday with a brief + outreach draft pre-populated in Notion. I review — I don't research.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">5–8h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">5–8h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-medium">↑ Moves deal sourcing goal</span>
       </div>
     </div>
 
-    <!-- Card 3 -->
+    <!-- S1 · #3 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #3</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #3</div>
         <div class="build-outcome">Scheduling runs on rules — not my attention</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-medium">Medium lift</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">Sent email is full of calendar accept/declines and Calendly link replies. Each scheduling exchange is 2–4 back-and-forth emails that require my attention but no real judgment. Outlook is tracking at 3.8h over 14 days.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">Sent email is full of calendar accept/declines and Calendly link replies. Each scheduling exchange is 2–4 back-and-forth emails that require my attention but no real judgment. Outlook is tracking at 3.8h over 14 days.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">AI monitors inbox for meeting requests and proposes times based on rules I set — LP meetings get priority Tue–Thu 9–11am slots. Calendly links go out automatically for known meeting types. I only touch high-judgment scheduling decisions.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">AI monitors inbox for meeting requests and proposes times based on rules I set — LP meetings get priority Tue–Thu 9–11am slots. Calendly links go out automatically for known meeting types. I only touch high-judgment scheduling decisions.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">2–3h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">2–3h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-high">↑ Creates LP meeting capacity</span>
       </div>
     </div>
 
-    <!-- Card 4 -->
+    <!-- S1 · #4 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #4</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #4</div>
         <div class="build-outcome">VC catch-ups produce LP leads — not just relationship maintenance</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-medium">Medium lift</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">VC catch-ups with Glasswing, Lightbank, Arthur Ventures happen regularly, but LP referral leads surfaced in conversation go untracked. Good intel (e.g. "search investment office + Kellogg for LP leads") disappears into Granola and is never acted on.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">VC catch-ups with Glasswing, Lightbank, Arthur Ventures happen regularly, but LP referral leads surfaced in conversation go untracked. Good intel (e.g. "search investment office + Kellogg for LP leads") disappears into Granola and is never acted on.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">After each VC call, Granola transcript is parsed for LP referral leads mentioned. AI extracts names + companies → creates a Notion task with a draft intro request. VC meetings become a compounding LP pipeline, not just network maintenance.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">After each VC call, Granola transcript is parsed for LP referral leads mentioned. AI extracts names + companies → creates a Notion task with a draft intro request. VC meetings become a compounding LP pipeline, not just network maintenance.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">1–2h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">1–2h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-high">↑ Directly moves LP goal</span>
       </div>
     </div>
 
-    <!-- Card 5 -->
+    <!-- S1 · #5 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #5</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #5</div>
         <div class="build-outcome">Every company meeting produces a structured deal note — automatically</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-quick">Quick win</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">Deal feedback is being written inline in Teams (Moiz, Plutus) with no structure. Granola links get posted manually to Teams channels. There's no pipeline from transcript → structured memo → Notion Founder CRM entry. Each deal touches me 3–4 times.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">Deal feedback is being written inline in Teams (Moiz, Plutus) with no structure. Granola links get posted manually to Teams channels. There's no pipeline from transcript → structured memo → Notion Founder CRM entry. Each deal touches me 3–4 times.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">Trigger: Granola meeting ends. Hook reads transcript → extracts company name, ARR, thesis fit, key signals, open questions, next step → posts to Notion CRM + drops summary in Teams thread. Requires confirmation, not writing.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">Trigger: Granola meeting ends. Hook reads transcript → extracts company name, ARR, thesis fit, key signals, open questions, next step → posts to Notion CRM + drops summary in Teams thread. Requires confirmation, not writing.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">2–3h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">2–3h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-medium">↑ Improves deal pipeline quality</span>
       </div>
     </div>
 
-    <!-- Card 6 -->
+    <!-- S1 · #6 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S1 · #6</div>
+      <div class="build-card-top">
+        <div class="build-id">S1 · #6</div>
         <div class="build-outcome">My LP and deal progress is always visible — no manual tracking</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-quick">Quick win</span>
-          <span class="badge badge-status">Not started</span>
+          <span class="badge badge-not">Not started</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What's happening today</div>
-          <div class="build-cell-text">Tracking LP meetings vs. the 3/week goal requires a manual conversation each week. Some LP meetings aren't on Outlook at all. Calendar categorization is ambiguous. There's no live score — just memory and guesswork.</div>
+          <div class="cell-label">What's happening today</div>
+          <div class="cell-text">Tracking LP meetings vs. the 3/week goal requires a manual conversation each week. Some LP meetings aren't on Outlook at all. Calendar categorization is ambiguous. There's no live score — just memory and guesswork.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What the automated version looks like</div>
-          <div class="build-cell-text">A Monday-morning summary (Teams or email) shows: LP meetings last week vs. goal, new companies sourced vs. 1/week target, who needs follow-up. Pulls from Outlook + Notion CRM. 30 seconds to read, zero manual work.</div>
+          <div class="cell-label">What the automated version looks like</div>
+          <div class="cell-text">A Monday-morning summary (Teams or email) shows: LP meetings last week vs. goal, new companies sourced vs. 1/week target, who needs follow-up. Pulls from Outlook + Notion CRM. 30 seconds to read, zero manual work.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">1h</div>
-          <div class="build-hours-label">reclaimed per week</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">1h</span><span class="hours-label">reclaimed per week</span></div>
         <span class="impact-pill impact-high">↑ Keeps LP goal on track</span>
       </div>
     </div>
 
     <hr class="sprint-divider">
-    <div class="sprint-current-label"><div class="sprint-current-dot"></div> Sprint 2 — Active</div>
+    <div class="sprint-label sprint-active"><div class="sprint-dot"></div> Sprint 2 — Active</div>
 
-    <!-- S2 Card 1 -->
+    <!-- S2 · #1 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S2 · #1</div>
+      <div class="build-card-top">
+        <div class="build-id">S2 · #1</div>
         <div class="build-outcome">Live Kanban dashboard — every automation idea tracked in one place</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-quick">Quick win</span>
-          <span class="badge badge-shipped">✓ Shipped</span>
+          <span class="badge badge-done">✓ Shipped</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What was missing</div>
-          <div class="build-cell-text">Automation ideas were scattered — some in Notion, some in chat, some in my head. No single view of what's queued, in flight, or done. Prioritization was invisible and hard to revisit.</div>
+          <div class="cell-label">What was missing</div>
+          <div class="cell-text">Automation ideas were scattered — some in Notion, some in chat, some in my head. No single view of what's queued, in flight, or done. Prioritization was invisible and hard to revisit.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What was built</div>
-          <div class="build-cell-text">A Kanban board (<code>ai-builder-dashboard.html</code>) with 10 automation cards across four columns: Suggested, To Build, In Progress, Done. Cards show name, description, and priority. Deployed to Vercel.</div>
+          <div class="cell-label">What was built</div>
+          <div class="cell-text">A Kanban board (<code>ai-builder-dashboard.html</code>) with 10 automation cards across four columns: Suggested, To Build, In Progress, Done. Cards show name, description, and priority. Deployed to Vercel.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">10 cards</div>
-          <div class="build-hours-label">tracked across 4 stages</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">10 cards</span><span class="hours-label">tracked across 4 stages</span></div>
         <span class="impact-pill impact-high">↑ Makes system visible</span>
       </div>
     </div>
 
-    <!-- S2 Card 2 -->
+    <!-- S2 · #2 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S2 · #2</div>
+      <div class="build-card-top">
+        <div class="build-id">S2 · #2</div>
         <div class="build-outcome">Notion as the source of truth — board state persists and syncs live</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-medium">Medium lift</span>
-          <span class="badge badge-shipped">✓ Shipped</span>
+          <span class="badge badge-done">✓ Shipped</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What was missing</div>
-          <div class="build-cell-text">The original board used localStorage — state was browser-local, not shareable, and lost on clear. Moving a card had no lasting effect. The roadmap needed a real backend so it could be updated from anywhere and persist across sessions.</div>
+          <div class="cell-label">What was missing</div>
+          <div class="cell-text">The original board used localStorage — state was browser-local, not shareable, and lost on clear. Moving a card had no lasting effect. The roadmap needed a real backend so it could be updated from anywhere and persist across sessions.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What was built</div>
-          <div class="build-cell-text">An <strong>AI Automation Roadmap</strong> database in Notion wired to a <code>/api/roadmap</code> endpoint (GET + PATCH). Dashboard loads cards from Notion on open; dragging a card to a new column writes the status back instantly. No refresh needed.</div>
+          <div class="cell-label">What was built</div>
+          <div class="cell-text">An <strong>AI Automation Roadmap</strong> database in Notion wired to a <code>/api/roadmap</code> endpoint (GET + PATCH). Dashboard loads cards from Notion on open; dragging a card to a new column writes the status back instantly. No refresh needed.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">Live sync</div>
-          <div class="build-hours-label">drag → Notion updates in &lt;1s</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">Live sync</span><span class="hours-label">drag → Notion updates in &lt;1s</span></div>
         <span class="impact-pill impact-medium">↑ Roadmap becomes a real system</span>
       </div>
     </div>
 
-    <!-- S2 Card 3 -->
+    <!-- S2 · #3 -->
     <div class="build-card">
-      <div class="build-card-header">
-        <div class="build-rank">S2 · #3</div>
+      <div class="build-card-top">
+        <div class="build-id">S2 · #3</div>
         <div class="build-outcome">Automation advisor agent — 60-second briefing on what to build next</div>
-        <div class="build-badges">
+        <div class="badge-row">
           <span class="badge badge-medium">Medium lift</span>
-          <span class="badge badge-shipped">✓ Shipped</span>
+          <span class="badge badge-done">✓ Shipped</span>
         </div>
       </div>
-      <div class="build-detail-grid">
+      <div class="build-cells">
         <div class="build-cell">
-          <div class="build-cell-label">What was missing</div>
-          <div class="build-cell-text">Even with a visible roadmap, choosing what to build next required manual review. No signal on what's stalled, what's highest leverage, or what should be added. Prioritization was still a judgment call with no data behind it.</div>
+          <div class="cell-label">What was missing</div>
+          <div class="cell-text">Even with a visible roadmap, choosing what to build next required manual review. No signal on what's stalled, what's highest leverage, or what should be added. Prioritization was still a judgment call with no data behind it.</div>
         </div>
         <div class="build-cell">
-          <div class="build-cell-label">What was built</div>
-          <div class="build-cell-text">An agent that reads the Notion roadmap and Claude Code session history, then outputs a structured briefing: current priorities, stalls, and one new automation to add. Takes 60 seconds to read. No manual analysis required.</div>
+          <div class="cell-label">What was built</div>
+          <div class="cell-text">An agent that reads the Notion roadmap and Claude Code session history, then outputs a structured briefing: current priorities, stalls, and one new automation to add. Takes 60 seconds to read. No manual analysis required.</div>
         </div>
       </div>
-      <div class="build-footer">
-        <div class="build-hours">
-          <div class="build-hours-val">60 sec</div>
-          <div class="build-hours-label">to full roadmap situational awareness</div>
-        </div>
+      <div class="build-foot">
+        <div><span class="hours">60 sec</span><span class="hours-label">to full roadmap situational awareness</span></div>
         <span class="impact-pill impact-high">↑ Closes the build-prioritize loop</span>
       </div>
     </div>
 
-    <!-- Live links -->
     <div class="live-links">
       <a class="live-link" href="https://ai-builder-theta-six.vercel.app/" target="_blank"><div class="live-dot"></div> Dashboard</a>
       <a class="live-link" href="https://ai-builder-theta-six.vercel.app/ai-builder-plan.html" target="_blank"><div class="live-dot"></div> Automation Plan</a>
       <a class="live-link" href="https://ai-builder-theta-six.vercel.app/time-audit.html" target="_blank"><div class="live-dot"></div> Time Audit</a>
     </div>
-
   </div>
 
-  <!-- ── SECTION 3: MY SYSTEM (dark) ── -->
-  <div class="section section-dark">
-    <div class="section-title">My System <span class="section-num">§3</span></div>
+  <!-- §03 — MY SYSTEM (dark) -->
+  <div class="dark-section">
+    <div class="eyebrow">§ 03</div>
+    <div class="section-heading">My system</div>
     <p class="section-desc">Each sprint builds on the last. S1 automations are the foundation.</p>
     <div class="sprint-grid">
 
       <div class="sprint-card done">
         <div class="sprint-icon">🌐</div>
-        <div class="sprint-label">Sprint 2 — Done</div>
+        <div class="sprint-n">Sprint 2 — Done</div>
         <div class="sprint-title">Kanban dashboard + Notion backend + advisor agent</div>
-        <div class="sprint-coming">✓ Live at vercel.app</div>
+        <div class="sprint-note">✓ Live at vercel.app</div>
       </div>
 
       <div class="sprint-card">
         <div class="sprint-icon">⚙️</div>
-        <div class="sprint-label">Sprint 3</div>
+        <div class="sprint-n">Sprint 3</div>
         <div class="sprint-title">Automated n8n or Claude Routines workflow</div>
-        <div class="sprint-coming">Coming in Sprint 3</div>
+        <div class="sprint-note">Coming in Sprint 3</div>
       </div>
 
       <div class="sprint-card">
         <div class="sprint-icon">🧠</div>
-        <div class="sprint-label">Sprint 4</div>
+        <div class="sprint-n">Sprint 4</div>
         <div class="sprint-title">Knowledge wiki context system</div>
-        <div class="sprint-coming">Coming in Sprint 4</div>
+        <div class="sprint-note">Coming in Sprint 4</div>
       </div>
 
       <div class="sprint-card">
         <div class="sprint-icon">🤖</div>
-        <div class="sprint-label">Sprint 5</div>
+        <div class="sprint-n">Sprint 5</div>
         <div class="sprint-title">Custom agentic workflow</div>
-        <div class="sprint-coming">Coming in Sprint 5</div>
+        <div class="sprint-note">Coming in Sprint 5</div>
       </div>
 
       <div class="sprint-card">
         <div class="sprint-icon">✅</div>
-        <div class="sprint-label">Sprint 6</div>
+        <div class="sprint-n">Sprint 6</div>
         <div class="sprint-title">Eval system — tested and documented</div>
-        <div class="sprint-coming">Coming in Sprint 6</div>
+        <div class="sprint-note">Coming in Sprint 6</div>
       </div>
 
     </div>
   </div>
 
-  <!-- ── FOOTER ── -->
+  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-text">AI Builder Automation Portfolio — April 30, 2026 · L2</div>
     <div class="footer-links">
@@ -781,5 +988,31 @@
   </div>
 
 </div>
+
+<script>
+// Staggered hero entry
+const objs = document.querySelectorAll('.fobj');
+objs.forEach(el => {
+  const delay = parseInt(el.dataset.delay || 0);
+  setTimeout(() => el.classList.add('in'), 120 + delay);
+});
+
+// Scroll parallax for hero objects
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    const sy = window.scrollY;
+    objs.forEach(el => {
+      const depth = parseFloat(el.style.opacity) || 0.3;
+      const speed = 0.25 + depth * 0.9;
+      el.style.transform = `scale(1) translateY(${sy * speed * -0.35}px)`;
+    });
+    ticking = false;
+  });
+}, { passive: true });
+</script>
+
 </body>
 </html>
